@@ -132,6 +132,8 @@ $("#select-city").on("click", function (event) {
  event.preventDefault();
   var inputCity = $("#city-input").val().trim();
   clearDiv("restaurantinfo-div");
+  clearDiv("cityinfo-div");
+
 //alert(inputCity);
   searchWeather(inputCity);
   getCityID(inputCity);
