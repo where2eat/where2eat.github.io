@@ -127,7 +127,7 @@ function getCityID() {
   });
 }
 
-function getLocation(long, lat) {
+function getLocationID(long, lat) {
   //function to extract cityID of user input from zomato api
  // var userInput = $("#city-input").val();
 //  var queryURL = "https://developers.zomato.com/api/v2.1/cities?q=" + userInput;
@@ -213,7 +213,7 @@ function showPosition(position) {
   var lat = position.coords.latitude;
   console.log(lat);
     console.log(long);
-  getLocation(long, lat);
+  getLocationID(long, lat);
 }
 function getLocation() {
   if (navigator.geolocation) {
