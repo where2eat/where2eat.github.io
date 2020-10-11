@@ -157,7 +157,7 @@ var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + long + "&
         },
       }).then(function (response) {
         var randomInd = Math.floor(Math.random() * 20);
-
+        console.log(response);
         var randomRestaurant = response.restaurants[randomInd].restaurant.name;
         var mainURL = response.restaurants[randomInd].restaurant.url;
         var menuURL = response.restaurants[randomInd].restaurant.menu_url;
