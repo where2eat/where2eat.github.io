@@ -1,5 +1,4 @@
 //Where2Eat
-
 function searchWeather(name) {
   var APIKey = "88679b3ed150543b880c7b4c2f742ac1"; // currently Alex's API key
   var userInput = name; //$("#city-input").val();
@@ -230,9 +229,7 @@ function getLocation() {
     x.innerHTML = "Geolocation is not supported by this browser.";
   }
 }
-function scrollSmoothToBottom (id) {
- scrollingElement = (document.scrollingElement || document.body)
-   $(scrollingElement).animate({
-      scrollTop: document.body.scrollHeight
-   }, 500);
+function scrollSmoothToBottom () {
+   var objDiv = document.getElementById("restaurantinfo-div");
+objDiv.scrollTop = objDiv.scrollHeight;
 }
