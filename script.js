@@ -230,6 +230,6 @@ function getLocation() {
   }
 }
 function scrollSmoothToBottom () {
-  var elmnt = document.getElementById("footer");
+  var elmnt = document.getElementById("below");
   elmnt.scrollIntoView();
 }
