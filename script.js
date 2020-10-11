@@ -231,7 +231,7 @@ function getLocation() {
   }
 }
 function scrollSmoothToBottom (id) {
-  scrollingElement = (document.scrollingElement || document.body);
+ scrollingElement = (document.scrollingElement || document.body)
    $(scrollingElement).animate({
       scrollTop: document.body.scrollHeight
    }, 500);
