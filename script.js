@@ -141,12 +141,14 @@ var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + long + "&
     },
   }).then(function (response) {
     //console.log(response.location_suggestions[0].id);
-    //var userCity = response.location_suggestions[0].id; //grabs the first location suggestion's ID
-    function getRestLocation(long, lat) {
+    var userCity = response.location.city_id; //grabs the first location suggestion's ID
+    function getRestLocation(userCity) {
       //another function to serach for restaurants based on city ID
       var queryURL2 =
-        "https://developers.zomato.com/api/v2.1/geocode?lat=" + long + "&lon=" + lat;
-      console.log(queryURL2);
+        "https://developers.zomato.com/api/v2.1/search?entity_id=" +
+        userCity +
+        "&entity_type=city&count=100";
+     // console.log(queryURL2);
 
       $.ajax({
         url: queryURL2,
@@ -161,7 +163,7 @@ var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + long + "&
         var randomRestaurant = response.restaurants[randomInd].restaurant.name;
         var mainURL = response.restaurants[randomInd].restaurant.url;
         var menuURL = response.restaurants[randomInd].restaurant.menu_url;
-        var featImg = $("<img>").attr("src", response.restaurants[randomInd].restaurant.featured_image);
+        var featImg = $("<img>").attr("src", response.nearby_restaurants[randomInd].restaurant.featured_image);
         var restaurantEl = $("<a>").text(randomRestaurant);
         var menuEl = $("<a>").text("Menu");
         var restTiming = response.restaurants[randomInd].restaurant.timings;
@@ -186,7 +188,7 @@ var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + long + "&
       });
     }
 
-    getRestLocation(long, lat);
+    getRestLocation(userCity);
   });
 }
 
