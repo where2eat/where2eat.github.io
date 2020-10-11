@@ -203,7 +203,7 @@ $("#select-city").on("click", function (event) {
 //alert(inputCity);
   searchWeather(inputCity);
   getCityID(inputCity);
-scrollSmoothToBottom();
+setTimeout(scrollToBottom,3000);
 });
 function clearDiv(elementID) { 
             var div = document.getElementById(elementID); 
@@ -220,7 +220,7 @@ function showPosition(position) {
   console.log(lat);
     console.log(long);
   getLocationID(long, lat);
-  scrollSmoothToBottom();
+  setTimeout(scrollToBottom,3000);
 }
 function getLocation() {
   if (navigator.geolocation) {
@@ -229,7 +229,6 @@ function getLocation() {
     x.innerHTML = "Geolocation is not supported by this browser.";
   }
 }
-function scrollSmoothToBottom () {
-  var elmnt = document.getElementById("below");
-  elmnt.scrollIntoView();
+function scrollToBottom{
+         window.scrollTo(0, document.body.scrollHeight);
 }
