@@ -229,6 +229,6 @@ function getLocation() {
     x.innerHTML = "Geolocation is not supported by this browser.";
   }
 }
-function scrollToBottom{
+function scrollToBottom() {
          window.scrollTo(0, document.body.scrollHeight);
 }
