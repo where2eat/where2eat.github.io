@@ -18,7 +18,7 @@ function searchWeather(name) {
     var cityName = $("<h1>").text(response.name); // creating the variable for city name
     var mainWeather = $("<h2>").text(response.weather[0].main); // creating the name for the main weather data value
     var weatherIcon = response.weather[0].icon;
-    var iconURL = "http://openweathermap.org/img/w/" + weatherIcon + ".png";
+    var iconURL = "https://openweathermap.org/img/w/" + weatherIcon + ".png";
     iconEl = $("<img>").attr("src", iconURL);
     $("#cityinfo-div").empty(); // emptying div
     $("#cityinfo-div").append(cityName, mainWeather);// appending the under inputted city name, and the corresponding main weather data value
