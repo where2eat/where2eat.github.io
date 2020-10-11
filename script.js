@@ -1,6 +1,5 @@
 //Where2Eat
 
-scrollingElement = (document.scrollingElement || document.body)
 function searchWeather(name) {
   var APIKey = "88679b3ed150543b880c7b4c2f742ac1"; // currently Alex's API key
   var userInput = name; //$("#city-input").val();
@@ -232,6 +231,7 @@ function getLocation() {
   }
 }
 function scrollSmoothToBottom (id) {
+  scrollingElement = (document.scrollingElement || document.body);
    $(scrollingElement).animate({
       scrollTop: document.body.scrollHeight
    }, 500);
