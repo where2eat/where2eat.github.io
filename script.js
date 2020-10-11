@@ -230,6 +230,6 @@ function getLocation() {
   }
 }
 function scrollSmoothToBottom () {
-   var objDiv = document.getElementById("restaurantinfo-div");
-objDiv.scrollTop = objDiv.scrollHeight;
+  var elmnt = document.getElementById("footer");
+  elmnt.scrollIntoView();
 }
