@@ -131,7 +131,7 @@ function getLocationID(long, lat) {
   //function to extract cityID of user input from zomato api
  // var userInput = $("#city-input").val();
 //  var queryURL = "https://developers.zomato.com/api/v2.1/cities?q=" + userInput;
-var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + long + "&lon=-" + lat;
+var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + long + "&lon=" + lat;
   $.ajax({
     url: queryURL,
     method: "GET",
@@ -145,7 +145,7 @@ var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + long + "&
     function getRestLocation(long, lat) {
       //another function to serach for restaurants based on city ID
       var queryURL2 =
-        "https://developers.zomato.com/api/v2.1/geocode?lat=" + long + "&lon=-" + lat;
+        "https://developers.zomato.com/api/v2.1/geocode?lat=" + long + "&lon=" + lat;
       console.log(queryURL2);
 
       $.ajax({
