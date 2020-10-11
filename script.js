@@ -140,8 +140,8 @@ var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + long + "&
       "user-key": "e27ebe249bf6837584304788457085eb",
     },
   }).then(function (response) {
-    console.log(response.location_suggestions[0].id);
-    var userCity = response.location_suggestions[0].id; //grabs the first location suggestion's ID
+    //console.log(response.location_suggestions[0].id);
+    //var userCity = response.location_suggestions[0].id; //grabs the first location suggestion's ID
     function getRestLocation(long, lat) {
       //another function to serach for restaurants based on city ID
       var queryURL2 =
@@ -211,6 +211,8 @@ function clearDiv(elementID) {
 function showPosition(position) {
   var long = position.coords.longitude;
   var lat = position.coords.latitude;
+  console.log(lat);
+    console.log(long);
   getLocation(long, lat);
 }
 function getLocation() {
