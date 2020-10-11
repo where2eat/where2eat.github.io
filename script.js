@@ -127,6 +127,69 @@ function getCityID() {
   });
 }
 
+function getLocation(long, lat) {
+  //function to extract cityID of user input from zomato api
+ // var userInput = $("#city-input").val();
+//  var queryURL = "https://developers.zomato.com/api/v2.1/cities?q=" + userInput;
+var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + long + "&lon=-" + lat;
+  $.ajax({
+    url: queryURL,
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "user-key": "e27ebe249bf6837584304788457085eb",
+    },
+  }).then(function (response) {
+    console.log(response.location_suggestions[0].id);
+    var userCity = response.location_suggestions[0].id; //grabs the first location suggestion's ID
+    function getRestLocation(long, lat) {
+      //another function to serach for restaurants based on city ID
+      var queryURL2 =
+        "https://developers.zomato.com/api/v2.1/geocode?lat=" + long + "&lon=-" + lat;
+      console.log(queryURL2);
+
+      $.ajax({
+        url: queryURL2,
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "user-key": "e27ebe249bf6837584304788457085eb",
+        },
+      }).then(function (response) {
+        var randomInd = Math.floor(Math.random() * 20);
+
+        var randomRestaurant = response.restaurants[randomInd].restaurant.name;
+        var mainURL = response.restaurants[randomInd].restaurant.url;
+        var menuURL = response.restaurants[randomInd].restaurant.menu_url;
+        var featImg = $("<img>").attr("src", response.restaurants[randomInd].restaurant.featured_image);
+        var restaurantEl = $("<a>").text(randomRestaurant);
+        var menuEl = $("<a>").text("Menu");
+        var restTiming = response.restaurants[randomInd].restaurant.timings;
+        var timingEl = $("<div>").text("Hours of Operation: "+restTiming);
+        var restCuisine = response.restaurants[randomInd].restaurant.cuisines;
+        var cuisineEl = $("<div>").text("Cuisine: "+restCuisine);
+        var restRating = response.restaurants[randomInd].restaurant.user_rating.aggregate_rating;
+        var ratingEl = $("<div>").text("Aggregate Rating: "+restRating);
+        var restLocation = response.restaurants[randomInd].restaurant.location.address;
+        var locLink = $("<a>").text(restLocation);
+
+        menuEl.attr("href", menuURL);
+        menuEl.attr("target", "_blank");
+        restaurantEl.attr("href", mainURL);
+        restaurantEl.attr("target", "_blank");
+        locLink.attr("href", "https://google.com/maps/place/" + restLocation.replace(/\s+/g, "+"));
+        locLink.attr("target", "_blank");
+ 
+        //alert("OK" + "<br>" + restaurantEl + "<br>" + locLink + "<br>" + ratingEl + "<br>" + cuisineEl + "<br>" + menuEl + "<br>" + timingEl + "<br>" + featImg);
+        $("#restaurantinfo-div").append(restaurantEl,"<br>" , locLink, ratingEl, cuisineEl, menuEl, timingEl, featImg);
+       // document.getElementById("restaurantinfo-div").innerHTML = "OK" + "<br>" + restaurantEl + "<br>" + locLink + "<br>" + ratingEl + "<br>" + cuisineEl + "<br>" + menuEl + "<br>" + timingEl + "<br>" + featImg;
+      });
+    }
+
+    getRestLocation(long, lat);
+  });
+}
+
 $("#select-city").on("click", function (event) {
   // creating the on click event to take in the user input city value
  event.preventDefault();
@@ -146,8 +209,9 @@ function clearDiv(elementID) {
             } 
         } 
 function showPosition(position) {
-  x.innerHTML = "Latitude: " + position.coords.latitude + 
-  "<br>Longitude: " + position.coords.longitude;
+  var long = position.coords.longitude;
+  var lat = position.coords.latitude;
+  getLocation(long, lat);
 }
 function getLocation() {
   if (navigator.geolocation) {
