@@ -140,7 +140,7 @@ var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + lat + "&l
       "user-key": "e27ebe249bf6837584304788457085eb",
     },
   }).then(function (response) {
-    //console.log(response.location_suggestions[0].id);
+    console.log(response.location.city_id;);
     var userCity = response.location.city_id; //grabs the first location suggestion's ID
     function getRestLocation(userCity) {
       //another function to serach for restaurants based on city ID
@@ -159,7 +159,6 @@ var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + lat + "&l
         },
       }).then(function (response) {
         var randomInd = Math.floor(Math.random() * 20);
-        console.log(response);
         var randomRestaurant = response.restaurants[randomInd].restaurant.name;
         var mainURL = response.restaurants[randomInd].restaurant.url;
         var menuURL = response.restaurants[randomInd].restaurant.menu_url;
