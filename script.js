@@ -204,7 +204,8 @@ $("#select-city").on("click", function (event) {
 //alert(inputCity);
   searchWeather(inputCity);
   getCityID(inputCity);
-  window.scrollTo(0,document.body.scrollHeight);
+ var scrollingElement = (document.scrollingElement || document.body);
+scrollingElement.scrollTop = scrollingElement.scrollHeight;
 });
 function clearDiv(elementID) { 
             var div = document.getElementById(elementID); 
@@ -221,7 +222,8 @@ function showPosition(position) {
   console.log(lat);
     console.log(long);
   getLocationID(long, lat);
-  window.scrollTo(0,document.body.scrollHeight);
+  var scrollingElement = (document.scrollingElement || document.body);
+scrollingElement.scrollTop = scrollingElement.scrollHeight;
 }
 function getLocation() {
   if (navigator.geolocation) {
