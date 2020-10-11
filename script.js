@@ -2,7 +2,7 @@
 
 function searchWeather(name) {
   var APIKey = "88679b3ed150543b880c7b4c2f742ac1"; // currently Alex's API key
-  var userInput = $("#city-input").val();
+  var userInput = name; //$("#city-input").val();
   // building URL we need to access API
   var queryURL =
     "https://api.openweathermap.org/data/2.5/weather?q=" +
