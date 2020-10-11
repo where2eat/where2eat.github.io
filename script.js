@@ -1,5 +1,6 @@
 //Where2Eat
 
+scrollingElement = (document.scrollingElement || document.body)
 function searchWeather(name) {
   var APIKey = "88679b3ed150543b880c7b4c2f742ac1"; // currently Alex's API key
   var userInput = name; //$("#city-input").val();
@@ -204,8 +205,7 @@ $("#select-city").on("click", function (event) {
 //alert(inputCity);
   searchWeather(inputCity);
   getCityID(inputCity);
- var scrollingElement = (document.scrollingElement || document.body);
-scrollingElement.scrollTop = scrollingElement.scrollHeight;
+scrollSmoothToBottom();
 });
 function clearDiv(elementID) { 
             var div = document.getElementById(elementID); 
@@ -222,8 +222,7 @@ function showPosition(position) {
   console.log(lat);
     console.log(long);
   getLocationID(long, lat);
-  var scrollingElement = (document.scrollingElement || document.body);
-scrollingElement.scrollTop = scrollingElement.scrollHeight;
+  scrollSmoothToBottom();
 }
 function getLocation() {
   if (navigator.geolocation) {
@@ -231,4 +230,9 @@ function getLocation() {
   } else { 
     x.innerHTML = "Geolocation is not supported by this browser.";
   }
+}
+function scrollSmoothToBottom (id) {
+   $(scrollingElement).animate({
+      scrollTop: document.body.scrollHeight
+   }, 500);
 }
