@@ -197,7 +197,7 @@ $("#select-city").on("click", function (event) {
   // creating the on click event to take in the user input city value
  event.preventDefault();
 // document.body.style.cursor = 'wait';
-  let spinner = document.getElementById("spinner");
+  let spinner = document.getElementById("loading");
 spinner.style.visibility = 'visible'; //'hidden'
   var inputCity = $("#city-input").val().trim();
   clearDiv("restaurantinfo-div");
@@ -217,7 +217,7 @@ function clearDiv(elementID) {
         } 
 function showPosition(position) {
  //document.body.style.cursor = 'wait';
-  let spinner = document.getElementById("spinner");
+ let spinner = document.getElementById("loading");
 spinner.style.visibility = 'visible'; //'hidden'
     clearDiv("restaurantinfo-div");
   clearDiv("cityinfo-div");
@@ -238,6 +238,6 @@ function getLocation() {
 function scrollToBottom() {
          window.scrollTo(0, document.body.scrollHeight);
          //document.body.style.cursor = 'default';
-  let spinner = document.getElementById("spinner");
+   let spinner = document.getElementById("loading");
 spinner.style.visibility = 'hidden'; //'hidden'
 }
