@@ -196,6 +196,7 @@ var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + lat + "&l
 $("#select-city").on("click", function (event) {
   // creating the on click event to take in the user input city value
  event.preventDefault();
+  $('body').addClass('waiting');
   var inputCity = $("#city-input").val().trim();
   clearDiv("restaurantinfo-div");
   clearDiv("cityinfo-div");
@@ -213,6 +214,7 @@ function clearDiv(elementID) {
             } 
         } 
 function showPosition(position) {
+   $('body').addClass('waiting');
     clearDiv("restaurantinfo-div");
   clearDiv("cityinfo-div");
   var long = position.coords.longitude;
@@ -231,4 +233,5 @@ function getLocation() {
 }
 function scrollToBottom() {
          window.scrollTo(0, document.body.scrollHeight);
+         $('body').removeClass('waiting');
 }
