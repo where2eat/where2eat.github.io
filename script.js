@@ -203,13 +203,13 @@ function getZipCode(zip) {
   //function to extract cityID of user input from zomato api
  // var userInput = $("#city-input").val();
 //  var queryURL = "https://developers.zomato.com/api/v2.1/cities?q=" + userInput;
-var queryURL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=" + zip + "&facet=state&facet=timezone&facet=dst";
+var queryURL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=" + zip;
   $.ajax({
     url: queryURL,
     method: "GET",
   }).then(function (response) {
-    console.log(response.records.fields.city);
-    cityname = response.records.fields.city; //grabs the first location suggestion's ID
+    alert(response.records[0].fields.city);
+    cityname = response.records[0].fields.city; //grabs the first location suggestion's ID
     
       });
 }
@@ -221,12 +221,13 @@ $("#select-city").on("click", function (event) {
   let spinner = document.getElementById("loading");
 spinner.style.visibility = 'visible'; //'hidden'
   //NEW ***************************
-  //var zipname = $("#city-input").val().trim();
+  var zipname = $("#city-input").val().trim();
   //alert(zipname);
- // getZipCode(zipname);
+  getZipCode(zipname);
  // document.getElementById('city-input').value = cityname;
  // alert(cityname);
  //  var inputCity = cityname; // $("#city-input").val().trim();
+  
   //NEW ***************************
   var inputCity = $("#city-input").val().trim();
   clearDiv("restaurantinfo-div");
