@@ -13,6 +13,11 @@ function searchWeather(name) {
     // Ajax function to access query
     url: queryURL,
     method: "GET",
+    statusCode: {
+      404:function(){
+        alert("no results, please try again!");
+      }
+    },
   }).then(function (response) {
     var cityName = $("<h1>").text(response.name); // creating the variable for city name
     var mainWeather = $("<h2>").text(response.weather[0].main); // creating the name for the main weather data value
