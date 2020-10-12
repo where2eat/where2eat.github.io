@@ -55,15 +55,7 @@ function searchWeather(name) {
       }
       
       
-    },
-     error: function (jqXHR, textStatus, errorThrown) {
-                  if (jqXHR.status == 500) {
-                      alert('Internal error: ' + jqXHR.responseText);
-                  } else {
-                      alert('Unexpected error.');
-                  }
-              }
-
+    }
     weatherBackground();
   });
 }
