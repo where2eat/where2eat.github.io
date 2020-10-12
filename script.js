@@ -55,7 +55,14 @@ function searchWeather(name) {
       }
       
       
-    }
+    },
+     error: function (jqXHR, textStatus, errorThrown) {
+                  if (jqXHR.status == 500) {
+                      alert('Internal error: ' + jqXHR.responseText);
+                  } else {
+                      alert('Unexpected error.');
+                  }
+              }
 
     weatherBackground();
   });
@@ -120,11 +127,7 @@ function getCityID() {
         $("#restaurantinfo-div").append(restaurantEl,"<br>" , locLink, ratingEl, cuisineEl, menuEl, timingEl, featImg,"<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap button again for another eatery!</b></p>");
        // document.getElementById("restaurantinfo-div").innerHTML = "OK" + "<br>" + restaurantEl + "<br>" + locLink + "<br>" + ratingEl + "<br>" + cuisineEl + "<br>" + menuEl + "<br>" + timingEl + "<br>" + featImg;
       });
-    },
-    error: function (request, status, error) {
-        alert(request.responseText);
     }
-
     getRestaurants(userCity);
   });
 }
