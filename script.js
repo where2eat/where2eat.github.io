@@ -14,7 +14,7 @@ function searchWeather(name) {
     url: queryURL,
     method: "GET",
     error: function(e) {
-    alert(e);
+    alert("No restaurants found, please try again!");
     },
   }).then(function (response) {
     var cityName = $("<h1>").text(response.name); // creating the variable for city name
