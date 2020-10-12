@@ -1,7 +1,4 @@
 //Where2Eat
-$(window).on('beforeunload', function(){
-   $('*').css("cursor", "progress");
-});
 function searchWeather(name) {
   var APIKey = "88679b3ed150543b880c7b4c2f742ac1"; // currently Alex's API key
   var userInput = name; //$("#city-input").val();
