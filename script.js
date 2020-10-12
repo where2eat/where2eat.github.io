@@ -28,7 +28,6 @@ function searchWeather(name) {
 
     function weatherBackground(weather) {
       var weather = response.weather[0].main;
-      alert(weather);
       // if (weather == "Clear") {
       //   $("body").css("background-image", "url(./Assets/clear.jpg)");
       // } else if (weather == "Thunderstorm") {
