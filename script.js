@@ -221,15 +221,15 @@ $("#select-city").on("click", function (event) {
   let spinner = document.getElementById("loading");
 spinner.style.visibility = 'visible'; //'hidden'
   //NEW ***************************
-  var zipname = $("#city-input").val().trim();
+ // var zipname = $("#city-input").val().trim();
   //alert(zipname);
-  getZipCode(zipname);
+ // getZipCode(zipname);
 
  // alert(cityname);
-   var inputCity = cityname; // $("#city-input").val().trim();
+ //  var inputCity = cityname; // $("#city-input").val().trim();
   
   //NEW ***************************
- // var inputCity = $("#city-input").val().trim();
+ var inputCity = $("#city-input").val().trim();
   clearDiv("restaurantinfo-div");
   clearDiv("cityinfo-div");
 
