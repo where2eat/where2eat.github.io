@@ -208,9 +208,8 @@ var queryURL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=
     url: queryURL,
     method: "GET",
   }).then(function (response) {
-    alert(response.records[0].fields.city);
     cityname = response.records[0].fields.city; //grabs the first location suggestion's ID
-    
+    alert(cityname);
       });
 }
 
@@ -226,10 +225,10 @@ spinner.style.visibility = 'visible'; //'hidden'
   getZipCode(zipname);
   document.getElementById('city-input').value = cityname;
  // alert(cityname);
- //  var inputCity = cityname; // $("#city-input").val().trim();
+   var inputCity = cityname; // $("#city-input").val().trim();
   
   //NEW ***************************
-  var inputCity = $("#city-input").val().trim();
+ // var inputCity = $("#city-input").val().trim();
   clearDiv("restaurantinfo-div");
   clearDiv("cityinfo-div");
 
