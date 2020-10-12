@@ -1,4 +1,5 @@
 //Where2Eat
+var cityname;
 function searchWeather(name) {
   var APIKey = "88679b3ed150543b880c7b4c2f742ac1"; // currently Alex's API key
   var userInput = name; //$("#city-input").val();
@@ -198,13 +199,33 @@ var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + lat + "&l
   });
 }
 
+function getZipCode(zip) {
+  //function to extract cityID of user input from zomato api
+ // var userInput = $("#city-input").val();
+//  var queryURL = "https://developers.zomato.com/api/v2.1/cities?q=" + userInput;
+var queryURL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=" + zip + "&facet=state&facet=timezone&facet=dst;
+  $.ajax({
+    url: queryURL,
+    method: "GET",
+  }).then(function (response) {
+    console.log(response.records.fields.city);
+    cityname = response.records.fields.city; //grabs the first location suggestion's ID
+    
+      });
+}
+
+
 $("#select-city").on("click", function (event) {
   // creating the on click event to take in the user input city value
  event.preventDefault();
-// document.body.style.cursor = 'wait';
   let spinner = document.getElementById("loading");
 spinner.style.visibility = 'visible'; //'hidden'
-  var inputCity = $("#city-input").val().trim();
+  //NEW ***************************
+  getZipCode($("#city-input").val().trim());
+  document.getElementById('city-input').value = cityname;
+   var inputCity = cityname; // $("#city-input").val().trim();
+  //NEW ***************************
+  // $("#city-input").val().trim();
   clearDiv("restaurantinfo-div");
   clearDiv("cityinfo-div");
 
