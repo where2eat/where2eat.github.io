@@ -52,6 +52,9 @@ function searchWeather(name) {
         case "Snow":
           $("body").css("background-image", "url(./Assets/snow.jpg)");
           break;
+        case "Mist":
+          $("body").css("background-image", "url(./Assets/mist.png)");
+          break;
         Default:
           $("body").css("background-image", "url(./Assets/food.jpg)");
           break;
