@@ -23,7 +23,7 @@ function searchWeather(name) {
     var iconURL = "https://openweathermap.org/img/w/" + weatherIcon + ".png";
     iconEl = $("<img>").attr("src", iconURL);
     $("#cityinfo-div").empty(); // emptying div
-    $("#cityinfo-div").append(cityName, "<br>Current Weather:<br>",mainWeather);// appending the under inputted city name, and the corresponding main weather data value
+    $("#cityinfo-div").append(cityName, "Current Weather:<br>",mainWeather);// appending the under inputted city name, and the corresponding main weather data value
     $(mainWeather).append(iconEl); //appends weather icon after the weather description
 
     function weatherBackground(weather) {
