@@ -48,7 +48,7 @@ function searchWeather(name) {
           $("body").css("background-image", "url(./Assets/drizzle.jpg)");
           break;
         case "Rain":
-          $("body").css("background-image", "url(./Assets/rain.jpg)");
+          $("body").css("background-image", "url(./Assets/rain.png)");
           break;
         case "Snow":
           $("body").css("background-image", "url(./Assets/snow.jpg)");
