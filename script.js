@@ -92,6 +92,9 @@ function getCityID() {
           "user-key": "e27ebe249bf6837584304788457085eb",
         },
       }).then(function (response) {
+        if (response == '') {
+    alert('Sorry!');
+         }
         var randomInd = Math.floor(Math.random() * 20);
 
         var randomRestaurant = response.restaurants[randomInd].restaurant.name;
