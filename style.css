@@ -71,7 +71,7 @@ label {
     font-weight: bold;
     font-size: 20px;
     cursor: pointer;
-    width:275px;
+    width:350px;
 }
 
 #cityinfo-div {
@@ -107,7 +107,7 @@ footer{
   font-weight: bold;
   margin: 4px 2px;
   cursor: pointer;
-  width:275px;
+  width:350px;
 }
 #results-container {
     margin-bottom: 40px;
