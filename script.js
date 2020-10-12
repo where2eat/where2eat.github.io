@@ -203,7 +203,7 @@ function getZipCode(zip) {
   //function to extract cityID of user input from zomato api
  // var userInput = $("#city-input").val();
 //  var queryURL = "https://developers.zomato.com/api/v2.1/cities?q=" + userInput;
-var queryURL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=" + zip + "&facet=state&facet=timezone&facet=dst;
+var queryURL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=" + zip + "&facet=state&facet=timezone&facet=dst";
   $.ajax({
     url: queryURL,
     method: "GET",
