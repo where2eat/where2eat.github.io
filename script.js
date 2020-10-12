@@ -143,6 +143,7 @@ var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + lat + "&l
     var userCity = response.location.city_id; //grabs the first location suggestion's ID
      var inputCity = response.location.city_name; //grabs the first location suggestion's ID
       searchWeather(inputCity);
+    document.getElementById('city-input').value = inputCity;
     function getRestaurants2(userCity) {
       //another function to serach for restaurants based on city ID
       var queryURL2 =
@@ -219,7 +220,7 @@ function showPosition(position) {
  //document.body.style.cursor = 'wait';
  let spinner = document.getElementById("loading");
 spinner.style.visibility = 'visible'; //'hidden'
-  document.getElementById('city-input').value = ''
+  document.getElementById('city-input').value = '';
     clearDiv("restaurantinfo-div");
   clearDiv("cityinfo-div");
   var long = position.coords.longitude;
