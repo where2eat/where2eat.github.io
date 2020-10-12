@@ -221,8 +221,10 @@ $("#select-city").on("click", function (event) {
   let spinner = document.getElementById("loading");
 spinner.style.visibility = 'visible'; //'hidden'
   //NEW ***************************
-  getZipCode($("#city-input").val().trim());
+  var zipname = $("#city-input").val().trim();
+  getZipCode(zipname);
   document.getElementById('city-input').value = cityname;
+  alert(cityname);
    var inputCity = cityname; // $("#city-input").val().trim();
   //NEW ***************************
   // $("#city-input").val().trim();
