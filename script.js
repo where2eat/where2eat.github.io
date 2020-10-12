@@ -222,6 +222,7 @@ $("#select-city").on("click", function (event) {
 spinner.style.visibility = 'visible'; //'hidden'
   //NEW ***************************
   var zipname = $("#city-input").val().trim();
+  alert(zipname);
   getZipCode(zipname);
   document.getElementById('city-input').value = cityname;
   alert(cityname);
