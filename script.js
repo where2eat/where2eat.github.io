@@ -224,7 +224,7 @@ spinner.style.visibility = 'visible'; //'hidden'
   var zipname = $("#city-input").val().trim();
   //alert(zipname);
   getZipCode(zipname);
- // document.getElementById('city-input').value = cityname;
+  document.getElementById('city-input').value = cityname;
  // alert(cityname);
  //  var inputCity = cityname; // $("#city-input").val().trim();
   
