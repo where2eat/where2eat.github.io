@@ -74,6 +74,9 @@ function getCityID() {
       "user-key": "e27ebe249bf6837584304788457085eb",
     },
   }).then(function (response) {
+     if (response == '') {
+    alert('Sorry!');
+         }
     console.log(response.location_suggestions[0].id);
     var userCity = response.location_suggestions[0].id; //grabs the first location suggestion's ID
     function getRestaurants(userCity) {
@@ -92,9 +95,6 @@ function getCityID() {
           "user-key": "e27ebe249bf6837584304788457085eb",
         },
       }).then(function (response) {
-        if (response == '') {
-    alert('Sorry!');
-         }
         var randomInd = Math.floor(Math.random() * 20);
 
         var randomRestaurant = response.restaurants[randomInd].restaurant.name;
