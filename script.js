@@ -67,9 +67,9 @@ function searchWeather(name) {
   });
 }
 
-function getCityID() {
+function getCityID(inputCity) {
   //function to extract cityID of user input from zomato api
-  var userInput = $("#city-input").val();
+  var userInput = inputCity //$("#city-input").val();
   var queryURL = "https://developers.zomato.com/api/v2.1/cities?q=" + userInput;
 
   $.ajax({
@@ -209,6 +209,7 @@ var queryURL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=
     method: "GET",
   }).then(function (response) {
     cityname = response.records[0].fields.city; //grabs the first location suggestion's ID
+    document.getElementById('city-input').value = response.records[0].fields.city;
     alert(cityname);
       });
 }
@@ -223,7 +224,7 @@ spinner.style.visibility = 'visible'; //'hidden'
   var zipname = $("#city-input").val().trim();
   //alert(zipname);
   getZipCode(zipname);
-  document.getElementById('city-input').value = cityname;
+
  // alert(cityname);
    var inputCity = cityname; // $("#city-input").val().trim();
   
