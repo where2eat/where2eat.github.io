@@ -87,7 +87,7 @@ function getCityID(inputCity) {
       var queryURL2 =
         "https://developers.zomato.com/api/v2.1/search?entity_id=" +
         userCity +
-        "&entity_type=city&count=500";
+        "&entity_type=city&count=100";
       console.log(queryURL2);
 
       $.ajax({
@@ -98,7 +98,7 @@ function getCityID(inputCity) {
           "user-key": "e27ebe249bf6837584304788457085eb",
         },
       }).then(function (response) {
-        var randomInd = Math.floor(Math.random() * 50);
+        var randomInd = Math.floor(Math.random() * 30);
 
         var randomRestaurant = response.restaurants[randomInd].restaurant.name;
         var mainURL = response.restaurants[randomInd].restaurant.url;
@@ -154,7 +154,7 @@ var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + lat + "&l
       var queryURL2 =
         "https://developers.zomato.com/api/v2.1/search?entity_id=" +
         userCity +
-        "&entity_type=city&count=500";
+        "&entity_type=city&count=100";
       console.log(queryURL2);
 
       $.ajax({
@@ -165,7 +165,7 @@ var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + lat + "&l
           "user-key": "e27ebe249bf6837584304788457085eb",
         },
       }).then(function (response) {
-        var randomInd = Math.floor(Math.random() * 50);
+        var randomInd = Math.floor(Math.random() * 30);
 
         var randomRestaurant = response.restaurants[randomInd].restaurant.name;
         var mainURL = response.restaurants[randomInd].restaurant.url;
