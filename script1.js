@@ -135,62 +135,18 @@ function getLocationID(long, lat) {
   //function to extract cityID of user input from zomato api
  // var userInput = $("#city-input").val();
 //  var queryURL = "https://developers.zomato.com/api/v2.1/cities?q=" + userInput;
-var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + lat + "&lon=" + long;
+var queryURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=42.271131, -89.093995&radius=10000&type=restaurant&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc';
   $.ajax({
     url: queryURL,
     method: "GET",
-    headers: {
-      Accept: "application/json",
-      "user-key": "e27ebe249bf6837584304788457085eb",
-    },
   }).then(function (response) {
-    console.log(response.location.city_id);
-    var userCity = response.location.city_id; //grabs the first location suggestion's ID
-     var inputCity = response.location.city_name; //grabs the first location suggestion's ID
-      searchWeather(inputCity);
-    document.getElementById('city-input').value = inputCity;
-    function getRestaurants2(userCity) {
-      //another function to serach for restaurants based on city ID
-      var queryURL2 =
-        "https://developers.zomato.com/api/v2.1/search?entity_id=" +
-        userCity +
-        "&entity_type=city&count=100";
-      console.log(queryURL2);
+        var randomInd = Math.floor(Math.random() * 50);
 
-      $.ajax({
-        url: queryURL2,
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "user-key": "e27ebe249bf6837584304788457085eb",
-        },
-      }).then(function (response) {
-        var randomInd = Math.floor(Math.random() * 20);
-
-        var randomRestaurant = response.restaurants[randomInd].restaurant.name;
-        var mainURL = response.restaurants[randomInd].restaurant.url;
-        var menuURL = response.restaurants[randomInd].restaurant.menu_url;
-        var featImg = $("<img>").attr("src", response.restaurants[randomInd].restaurant.featured_image);
-        var restaurantEl = $("<a>").text(randomRestaurant);
-        var menuEl = $("<a>").text("Menu");
-        var restTiming = response.restaurants[randomInd].restaurant.timings;
-        var timingEl = $("<div>").text("Hours of Operation: "+restTiming);
-        var restCuisine = response.restaurants[randomInd].restaurant.cuisines;
-        var cuisineEl = $("<div>").text("Cuisine: "+restCuisine);
-        var restRating = response.restaurants[randomInd].restaurant.user_rating.aggregate_rating;
-        var ratingEl = $("<div>").text("Aggregate Rating: "+restRating);
-        var restLocation = response.restaurants[randomInd].restaurant.location.address;
-        var locLink = $("<a>").text(restLocation);
-
-        menuEl.attr("href", menuURL);
-        menuEl.attr("target", "_blank");
-        restaurantEl.attr("href", mainURL);
-        restaurantEl.attr("target", "_blank");
-        locLink.attr("href", "https://google.com/maps/place/" + restLocation.replace(/\s+/g, "+"));
-        locLink.attr("target", "_blank");
+        var randomRestaurant = response.results[randomInd].name;
+        var mainURL = response.restaurants[randomInd].vicinity;
  
         //alert("OK" + "<br>" + restaurantEl + "<br>" + locLink + "<br>" + ratingEl + "<br>" + cuisineEl + "<br>" + menuEl + "<br>" + timingEl + "<br>" + featImg);
-        $("#restaurantinfo-div").append(restaurantEl,"<br>" , locLink, ratingEl, cuisineEl, menuEl, timingEl, featImg,"<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap button again for another eatery!</b></p>");
+        $("#restaurantinfo-div").append(randomRestaurant,"<br>" , mainURL,"<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap button again for another eatery!</b></p>");
        // document.getElementById("restaurantinfo-div").innerHTML = "OK" + "<br>" + restaurantEl + "<br>" + locLink + "<br>" + ratingEl + "<br>" + cuisineEl + "<br>" + menuEl + "<br>" + timingEl + "<br>" + featImg;
       });
     }
