@@ -87,7 +87,7 @@ function getCityID(inputCity) {
       var queryURL2 =
         "https://developers.zomato.com/api/v2.1/search?entity_id=" +
         userCity +
-        "&entity_type=city&count=100";
+        "&entity_type=city&count=500";
       console.log(queryURL2);
 
       $.ajax({
@@ -154,7 +154,7 @@ var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + lat + "&l
       var queryURL2 =
         "https://developers.zomato.com/api/v2.1/search?entity_id=" +
         userCity +
-        "&entity_type=city&count=100";
+        "&entity_type=city&count=500";
       console.log(queryURL2);
 
       $.ajax({
