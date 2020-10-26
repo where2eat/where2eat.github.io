@@ -181,24 +181,19 @@ function getCityID(inputCity) {
 }
 
 function getLocationID(long, lat) {
-  //function to extract cityID of user input from zomato api
- // var userInput = $("#city-input").val();
-//  var queryURL = "https://developers.zomato.com/api/v2.1/cities?q=" + userInput;
-var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + lat + "&lon=" + long;
-  $.ajax({
-    url: queryURL,
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      "user-key": "e27ebe249bf6837584304788457085eb",
-    },
-  }).then(function (response) {
-    console.log(response.location.city_id);
-    //var userCity = response.location.city_id; //grabs the first location suggestion's ID
-     var inputCity = response.location.city_name; //grabs the first location suggestion's ID
-      searchWeather(inputCity);
-   // document.getElementById('city-input').value = inputCity;
-  });
+// var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + lat + "&lon=" + long;
+//   $.ajax({
+//     url: queryURL,
+//     method: "GET",
+//     headers: {
+//       Accept: "application/json",
+//       "user-key": "e27ebe249bf6837584304788457085eb",
+//     },
+//   }).then(function (response) {
+//     console.log(response.location.city_id);
+//      var inputCity = response.location.city_name; //grabs the first location suggestion's ID
+//       searchWeather(inputCity);
+//   });
  // var randomInd = Math.floor(Math.random() * 19) + 1;
   spin();
    spin2();
@@ -211,6 +206,9 @@ $.ajax( {
        // document.write(data.results[randomInd].vicinity + '<br>');
        // document.write("<img src='https://maps.googleapis.com/maps/api/place/photo?photoreference=" + data.results[randomInd].photos[0].photo_reference + "&sensor=false&maxheight=225&maxwidth=225&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc'" + "/>");
        var restLocation = data.results[randomInd].vicinity;
+       var city = restLocation.split(",");
+       searchWeather(city[1].trim());
+       console.log(city[1].trim());
        var locLink = $("<a>").text(restLocation);
         locLink.attr("href", "https://google.com/maps/place/" + restLocation.replace(/\s+/g, "+"));
       locLink.attr("target", "_blank");
