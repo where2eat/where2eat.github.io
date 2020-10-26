@@ -212,23 +212,20 @@ $("#restaurantinfo-div").append("<b>Open Now? </b>" + "No<br>");
 });
 }
 function details(){
-var phonenum;
-var www;
    //console.log("https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc");
 $.ajax( {
     url  : "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number,website&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc",
     success : function( data) {
-        phonenum = data.result.formatted_phone_number;
-        www = data.result.website;
+        var gphonenum = data.result.formatted_phone_number;
+        var gwww = data.result.website;
+        if (gwww !== null || gwww !== undefined){
+$("#restaurantinfo-div").append("<br>website: <a href='" + gwww + "' target='_blank'>link</a><br>");
+}
+if (gphonenum !== undefined || gphonenum !== null){
+$("#restaurantinfo-div").append("<br>Phone: " + gphonenum + '<br>');
+}
     }
 });
-console.log(www);        
-if (www !== null || www !== undefined){
-$("#restaurantinfo-div").append("<br>website: <a href='" + www + "' target='_blank'>link</a><br>");
-}
-if (phonenum !== undefined || phonenum !== null){
-$("#restaurantinfo-div").append("<br>Phone: " + phonenum + '<br>');
-}
 $("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap the GO! button again for another eatery!</b></p>");
 }
 function getZipCode(zip) {
