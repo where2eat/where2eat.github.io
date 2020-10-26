@@ -311,5 +311,5 @@ ginfo.style.visibility = 'visible'; //'hidden'
 let gcityinfo = document.getElementById("cityinfo-div");
 gcityinfo.style.visibility = 'visible'; //'hidden'
 let gresultsinfo = document.getElementById("results-container");
-gresultsinfo.style.visibility = 'hidden'; //'hidden'
+gresultsinfo.style.visibility = 'visible'; //'hidden'
 }
