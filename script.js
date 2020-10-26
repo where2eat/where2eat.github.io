@@ -6,11 +6,11 @@ var ranges = [];
 var randomInd;
 var randomradius;
 var blnRun = true;
-var restLocation = '';
-var restname = '';
-var blnOpen = true;
-var photoref = '';  
-var mycity='';
+var restLocation;
+var restname;
+var blnOpen;
+var photoref;  
+var mycity;
 function generateNumbers()
         {
             // populate the available numbers however you need to..
