@@ -218,10 +218,10 @@ $.ajax( {
     success : function( data) {
         var gphonenum = data.result.formatted_phone_number;
         var gwww = data.result.website;
-        if (gwww !== null || gwww !== undefined){
+        if (gwww != null || gwww != undefined){
 $("#restaurantinfo-div").append("<br>website: <a href='" + gwww + "' target='_blank'>link</a><br>");
 }
-if (gphonenum !== undefined || gphonenum !== null){
+if (gphonenum != undefined || gphonenum != null){
 $("#restaurantinfo-div").append("<br>Phone: " + gphonenum + '<br>');
 }
     }
