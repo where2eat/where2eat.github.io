@@ -219,7 +219,7 @@ $.ajax( {
     url  : "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number,website&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc",
     success : function( data) {
         phonenum = data.result.formatted_phone_number;
-        www = data.result.website
+        www = data.result.website;
     }
 });
 if (www !=  'N/A'){
