@@ -301,8 +301,8 @@ spinner.style.visibility = 'visible'; //'hidden'
   var lat = position.coords.latitude;
   console.log(lat);
     console.log(long);
-  getLocationID(long, lat);
-  setTimeout(scrollToBottom,3000);
+  setTimeout(getLocationID(long, lat);,1000);
+  setTimeout(scrollToBottom,4000);
 }
 function getLocation() {
   if (navigator.geolocation) {
