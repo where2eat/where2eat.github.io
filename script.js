@@ -287,6 +287,8 @@ function clearDiv(elementID) {
         } 
 function showPosition(position) {
  //document.body.style.cursor = 'wait';
+    let ginfo = document.getElementById("restaurantinfo-div");
+ginfo.style.visibility = 'hidden'; //'hidden'
     let btngo = document.getElementById("go");
 btngo.style.visibility = 'hidden'; //'hidden'
  let spinner = document.getElementById("loading");
@@ -313,4 +315,6 @@ function scrollToBottom() {
 spinner.style.visibility = 'hidden'; //'hidden'
     let btngo = document.getElementById("go");
 btngo.style.visibility = 'visible'; //'hidden'
+  let ginfo = document.getElementById("restaurantinfo-div");
+ginfo.style.visibility = 'visible'; //'hidden'
 }
