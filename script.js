@@ -288,6 +288,9 @@ function clearDiv(elementID) {
 function showPosition(position) {
 clearDiv("restaurantinfo-div");
 clearDiv("cityinfo-div");
+        //results-container
+let gresults = document.getElementById("results-container");
+gresults.style.visibility = 'hidden'; //'hidden'        
  //document.body.style.cursor = 'wait';
 let gcityinfo = document.getElementById("cityinfo-div");
 gcityinfo.style.visibility = 'hidden'; //'hidden'
@@ -322,4 +325,6 @@ btngo.style.visibility = 'visible'; //'hidden'
 ginfo.style.visibility = 'visible'; //'hidden'
 let gcityinfo = document.getElementById("cityinfo-div");
 gcityinfo.style.visibility = 'visible'; //'hidden'
+let gresults = document.getElementById("results-container");
+gresults.style.visibility = 'visible'; //'hidden'   
 }
