@@ -163,12 +163,12 @@ $.ajax( {
        var locLink = $("<a>").text(restLocation);
         locLink.attr("href", "https://google.com/maps/place/" + restLocation.replace(/\s+/g, "+"));
       locLink.attr("target", "_blank");
-      $("#restaurantinfo-div").append(data.results[randomInd].name + '<br>');
+      $("#restaurantinfo-div").append("<h1>" + data.results[randomInd].name + '</h1><br>');
       var blnOpen = data.results[randomInd].opening_hours.open_now;
       if (blnOpen){
- $("#restaurantinfo-div").append("Open Now? " + "Yes<br>");
+ $("#restaurantinfo-div").append("<b>Open Now? </b>" + "Yes<br>");
       }else{
-$("#restaurantinfo-div").append("Open Now? " + "No<br>");
+$("#restaurantinfo-div").append("<b>Open Now? </b>" + "No<br>");
       }
       
       $("#restaurantinfo-div").append(locLink);
