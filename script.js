@@ -6,7 +6,7 @@ var randomInd;
 function generateNumbers()
         {
             // populate the available numbers however you need to..
-            for(var i=0; i<20; i+=1)
+            for(var i=1; i<20; i+=1)
             {
                 numbers.push(i);
             }
