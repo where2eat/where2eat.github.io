@@ -286,6 +286,8 @@ function clearDiv(elementID) {
             } 
         } 
 function showPosition(position) {
+clearDiv("restaurantinfo-div");
+clearDiv("cityinfo-div");
  //document.body.style.cursor = 'wait';
 let gcityinfo = document.getElementById("cityinfo-div");
 gcityinfo.style.visibility = 'hidden'; //'hidden'
@@ -295,7 +297,6 @@ ginfo.style.visibility = 'hidden'; //'hidden'
 btngo.style.visibility = 'hidden'; //'hidden'
  let spinner = document.getElementById("loading");
 spinner.style.visibility = 'visible'; //'hidden'
-    clearDiv("restaurantinfo-div");
   var long = position.coords.longitude;
   var lat = position.coords.latitude;
   console.log(lat);
