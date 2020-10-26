@@ -240,9 +240,7 @@ function showPosition(position) {
  //document.body.style.cursor = 'wait';
  let spinner = document.getElementById("loading");
 spinner.style.visibility = 'visible'; //'hidden'
-  document.getElementById('city-input').value = '';
     clearDiv("restaurantinfo-div");
-  clearDiv("cityinfo-div");
   var long = position.coords.longitude;
   var lat = position.coords.latitude;
   console.log(lat);
