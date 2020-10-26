@@ -183,6 +183,11 @@ function getCityID(inputCity) {
 
 function getLocationID(long, lat) {
 blnRun=true;
+var restLocation = '';
+var restname = '';
+var blnOpen = false;
+var photoref = '';
+var city = '';        
 spin();
 spin2();
 $.ajax( {
@@ -190,12 +195,19 @@ $.ajax( {
     success : function( data) {
                try {
        pids = data.results[randomInd].place_id;
-       var restLocation = data.results[randomInd].vicinity;
-       var restname = data.results[randomInd].name;
-       var blnOpen = data.results[randomInd].opening_hours.open_now;
-       var photoref = data.results[randomInd].photos[0].photo_reference;
-              var city = restLocation.split(",");
-       searchWeather(city[1].trim());
+       restLocation = data.results[randomInd].vicinity;
+       restname = data.results[randomInd].name;
+       blnOpen = data.results[randomInd].opening_hours.open_now;
+       photoref = data.results[randomInd].photos[0].photo_reference;
+       city = restLocation.split(",");
+     
+         } catch (error) {
+blnRun = false;
+}
+    }
+});
+if (blnRun){
+  searchWeather(city[1].trim());
        console.log(city[1].trim());
        var locLink = $("<a>").text(restLocation);
        locLink.attr("href", "https://google.com/maps/place/" + restLocation.replace(/\s+/g, "+"));
@@ -208,13 +220,7 @@ $("#restaurantinfo-div").append("<b>Open Now? </b>" + "No<br>");
       }            
       $("#restaurantinfo-div").append(locLink);
       $("#restaurantinfo-div").append("<br><img src='https://maps.googleapis.com/maps/api/place/photo?photoreference=" + photoref + "&sensor=false&maxheight=225&maxwidth=225&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc'" + "/>");                
-         } catch (error) {
-blnRun = false;
-}
-    }
-});
-if (blnRun){
-setTimeout(function(){ details(); }, 1000);
+setTimeout(function(){ details(); }, 2000);
 }
 }
 function details(){
