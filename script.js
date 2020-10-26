@@ -1,6 +1,29 @@
 //Where2Eat
 var pids='';
 var cityname;
+var numbers = []; 
+var randomInd;
+function generateNumbers()
+        {
+            // populate the available numbers however you need to..
+            for(var i=0; i<20; i+=1)
+            {
+                numbers.push(i);
+            }
+        }
+ function spin()
+        {
+            if(numbers.length==0)
+            {
+                // then we've used  up all available numbers..start new game or whatever you need to do..
+                alert("starting again");
+               // generateNumbers();
+            }
+            var rand = Math.floor(Math.random()*numbers.length); // select an index randomly based on the number of remaining available numbers..
+            randomInd = numbers[rand];
+            numbers.splice(rand,1); // remove the number we selected so it can't be selected next time..
+            // document.getElementById("number").innerHTML = num;
+        }
 function searchWeather(name) {
   var APIKey = "88679b3ed150543b880c7b4c2f742ac1"; // currently Alex's API key
   var userInput = name; //$("#city-input").val();
@@ -151,7 +174,8 @@ var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + lat + "&l
       searchWeather(inputCity);
    // document.getElementById('city-input').value = inputCity;
   });
-  var randomInd = Math.floor(Math.random() * 19) + 1;
+ // var randomInd = Math.floor(Math.random() * 19) + 1;
+  spin();
    var randomradius = Math.floor(Math.random() * 15000) + 1500;
 $.ajax( {
     url  : 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + lat + ',' +  long + '&radius=' + randomradius + '&type=restaurant&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc',
