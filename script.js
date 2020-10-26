@@ -213,16 +213,17 @@ $("#restaurantinfo-div").append("<b>Open Now? </b>" + "No<br>");
 }
 function details(){
 var phonenum = 'N/A';
-var www = 'N/A';
+var www;
    //console.log("https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc");
 $.ajax( {
     url  : "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number,website&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc",
     success : function( data) {
         phonenum = data.result.formatted_phone_number;
         www = data.result.website;
+        console.log(www);
     }
 });
-if (www !=  'N/A'){
+if (www){
 $("#restaurantinfo-div").append("website: <a href='" + www + "' target='_blank'>link</a><br>");
 }
 if (phonenum !=  'N/A'){
