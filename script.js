@@ -173,7 +173,8 @@ $("#restaurantinfo-div").append("Open Now? " + "No<br>");
       
       $("#restaurantinfo-div").append(locLink);
       $("#restaurantinfo-div").append("<br><img src='https://maps.googleapis.com/maps/api/place/photo?photoreference=" + data.results[randomInd].photos[0].photo_reference + "&sensor=false&maxheight=225&maxwidth=225&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc'" + "/>");
-      //console.log(pids);
+      //"<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap button again for another eatery!</b></p>"
+       $("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap GO! button again for another eatery!</b></p>");
     }
 });
   setTimeout(function(){ details(); }, 1000);
