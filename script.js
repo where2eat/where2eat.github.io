@@ -1,4 +1,5 @@
 //Where2Eat
+var pids='';
 var cityname;
 function searchWeather(name) {
   var APIKey = "88679b3ed150543b880c7b4c2f742ac1"; // currently Alex's API key
@@ -145,60 +146,49 @@ var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + lat + "&l
     },
   }).then(function (response) {
     console.log(response.location.city_id);
-    var userCity = response.location.city_id; //grabs the first location suggestion's ID
+    //var userCity = response.location.city_id; //grabs the first location suggestion's ID
      var inputCity = response.location.city_name; //grabs the first location suggestion's ID
       searchWeather(inputCity);
-    document.getElementById('city-input').value = inputCity;
-    function getRestaurants2(userCity) {
-      //another function to serach for restaurants based on city ID
-      var queryURL2 =
-        "https://developers.zomato.com/api/v2.1/search?entity_id=" +
-        userCity +
-        "&entity_type=city&count=100";
-      console.log(queryURL2);
-
-      $.ajax({
-        url: queryURL2,
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "user-key": "e27ebe249bf6837584304788457085eb",
-        },
-      }).then(function (response) {
-        var randomInd = Math.floor(Math.random() * 20);
-
-        var randomRestaurant = response.restaurants[randomInd].restaurant.name;
-        var mainURL = response.restaurants[randomInd].restaurant.url;
-        var menuURL = response.restaurants[randomInd].restaurant.menu_url;
-        var featImg = $("<img>").attr("src", response.restaurants[randomInd].restaurant.featured_image);
-        var restaurantEl = $("<a>").text(randomRestaurant);
-        var menuEl = $("<a>").text("Menu");
-        var restTiming = response.restaurants[randomInd].restaurant.timings;
-        var timingEl = $("<div>").text("Hours of Operation: "+restTiming);
-        var restCuisine = response.restaurants[randomInd].restaurant.cuisines;
-        var cuisineEl = $("<div>").text("Cuisine: "+restCuisine);
-        var restRating = response.restaurants[randomInd].restaurant.user_rating.aggregate_rating;
-        var ratingEl = $("<div>").text("Aggregate Rating: "+restRating);
-        var restLocation = response.restaurants[randomInd].restaurant.location.address;
-        var locLink = $("<a>").text(restLocation);
-
-        menuEl.attr("href", menuURL);
-        menuEl.attr("target", "_blank");
-        restaurantEl.attr("href", mainURL);
-        restaurantEl.attr("target", "_blank");
-        locLink.attr("href", "https://google.com/maps/place/" + restLocation.replace(/\s+/g, "+"));
-        locLink.attr("target", "_blank");
- 
-        //alert("OK" + "<br>" + restaurantEl + "<br>" + locLink + "<br>" + ratingEl + "<br>" + cuisineEl + "<br>" + menuEl + "<br>" + timingEl + "<br>" + featImg);
-        $("#restaurantinfo-div").append(restaurantEl,"<br>" , locLink, ratingEl, cuisineEl, menuEl, timingEl, featImg,"<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap button again for another eatery!</b></p>");
-       // document.getElementById("restaurantinfo-div").innerHTML = "OK" + "<br>" + restaurantEl + "<br>" + locLink + "<br>" + ratingEl + "<br>" + cuisineEl + "<br>" + menuEl + "<br>" + timingEl + "<br>" + featImg;
-      });
-    }
-
-    getRestaurants2(userCity);
+   // document.getElementById('city-input').value = inputCity;
   });
+  var randomInd = Math.floor(Math.random() * 20);
+$.ajax( {
+    url  : 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + lat + ',' +  long + '&radius=1500&type=restaurant&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc',
+    success : function( data) {
+        pids = data.results[randomInd].place_id;
+       // document.write(data.results[randomInd].name + '<br>');
+       // document.write(data.results[randomInd].vicinity + '<br>');
+       // document.write("<img src='https://maps.googleapis.com/maps/api/place/photo?photoreference=" + data.results[randomInd].photos[0].photo_reference + "&sensor=false&maxheight=225&maxwidth=225&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc'" + "/>");
+       var restLocation = data.results[randomInd].vicinity;
+       var locLink = $("<a>").text(restLocation);
+        locLink.attr("href", "https://google.com/maps/place/" + restLocation.replace(/\s+/g, "+"));
+      locLink.attr("target", "_blank");
+      $("#restaurantinfo-div").append('<br>' + data.results[randomInd].name + '<br>');
+      var blnOpen = data.results[randomInd].opening_hours.open_now;
+      if (blnOpen){
+ $("#restaurantinfo-div").append("Open Now? " + "Yes<br>");
+      }else{
+$("#restaurantinfo-div").append("Open Now? " + "No<br>");
+      }
+      
+      $("#restaurantinfo-div").append(locLink);
+      $("#restaurantinfo-div").append("<img src='https://maps.googleapis.com/maps/api/place/photo?photoreference=" + data.results[randomInd].photos[0].photo_reference + "&sensor=false&maxheight=225&maxwidth=225&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc'" + "/>");
+      //console.log(pids);
+    }
+});
+  setTimeout(function(){ details(); }, 1000);
 }
-
+function details(){
+   //console.log("https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc");
+$.ajax( {
+    url  : "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number,website&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc",
+    success : function( data) {
+       // document.write("<br>Phone: " + data.result.formatted_phone_number + '<br>');
+        $("#restaurantinfo-div").append("<br>Phone: " + data.result.formatted_phone_number + '<br>');
+         $("#restaurantinfo-div").append("website: <a href='" + data.result.website + "' target='_blank'>link</a><br>");
+    }
+});
+}
 function getZipCode(zip) {
   //function to extract cityID of user input from zomato api
  // var userInput = $("#city-input").val();
