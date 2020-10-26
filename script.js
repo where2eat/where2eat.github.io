@@ -219,7 +219,7 @@ $.ajax( {
         var gphonenum = data.result.formatted_phone_number;
         var gwww = data.result.website;
         if (gwww != null || gwww != undefined){
-$("#restaurantinfo-div").append("website: <a href='" + gwww + "' target='_blank'>link</a><br>");
+$("#restaurantinfo-div").append("<br>website: <a href='" + gwww + "' target='_blank'>link</a><br>");
 }
 if (gphonenum != undefined || gphonenum != null){
 $("#restaurantinfo-div").append("Phone: " + gphonenum + '<br>');
