@@ -5,6 +5,8 @@ var numbers = [];
 var ranges = []; 
 var randomInd;
 var randomradius;
+let gresultsinfo = document.getElementById("results-container");
+gresultsinfo.style.visibility = 'hidden'; //'hidden'
 function generateNumbers()
         {
             // populate the available numbers however you need to..
