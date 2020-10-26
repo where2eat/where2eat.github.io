@@ -287,6 +287,8 @@ function clearDiv(elementID) {
         } 
 function showPosition(position) {
  //document.body.style.cursor = 'wait';
+let gcityinfo = document.getElementById("cityinfo-div");
+gcityinfo.style.visibility = 'hidden'; //'hidden'
     let ginfo = document.getElementById("restaurantinfo-div");
 ginfo.style.visibility = 'hidden'; //'hidden'
     let btngo = document.getElementById("go");
@@ -317,4 +319,6 @@ spinner.style.visibility = 'hidden'; //'hidden'
 btngo.style.visibility = 'visible'; //'hidden'
   let ginfo = document.getElementById("restaurantinfo-div");
 ginfo.style.visibility = 'visible'; //'hidden'
+let gcityinfo = document.getElementById("cityinfo-div");
+gcityinfo.style.visibility = 'visible'; //'hidden'
 }
