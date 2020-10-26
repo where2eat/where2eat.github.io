@@ -223,10 +223,10 @@ $.ajax( {
     }
 });
 console.log(www);        
-if (www !== null){
-$("#restaurantinfo-div").append("website: <a href='" + www + "' target='_blank'>link</a><br>");
+if (www !== null || www !== undefined){
+$("#restaurantinfo-div").append("<br>website: <a href='" + www + "' target='_blank'>link</a><br>");
 }
-if (phonenum !== null){
+if (phonenum !== undefined || phonenum !== null){
 $("#restaurantinfo-div").append("<br>Phone: " + phonenum + '<br>');
 }
 $("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap the GO! button again for another eatery!</b></p>");
