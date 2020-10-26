@@ -6,6 +6,11 @@ var ranges = [];
 var randomInd;
 var randomradius;
 var blnRun = true;
+var restLocation = '';
+var restname = '';
+var blnOpen = true;
+var photoref = '';
+var city = '';    
 function generateNumbers()
         {
             // populate the available numbers however you need to..
@@ -182,12 +187,7 @@ function getCityID(inputCity) {
 }
 
 function getLocationID(long, lat) {
-blnRun=true;
-var restLocation = '';
-var restname = '';
-var blnOpen = false;
-var photoref = '';
-var city = '';        
+blnRun=true;    
 spin();
 spin2();
 $.ajax( {
