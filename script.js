@@ -223,7 +223,7 @@ $.ajax( {
     }
 });
 if (www !=  'N/A'){
-$("#restaurantinfo-div").append("website: <a href='" + data.result.website + "' target='_blank'>link</a><br>");
+$("#restaurantinfo-div").append("website: <a href='" + www + "' target='_blank'>link</a><br>");
 }
 if (phonenum !=  'N/A'){
 $("#restaurantinfo-div").append("<br>Phone: " + phonenum + '<br>');
