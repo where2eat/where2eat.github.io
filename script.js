@@ -163,7 +163,7 @@ $.ajax( {
        var locLink = $("<a>").text(restLocation);
         locLink.attr("href", "https://google.com/maps/place/" + restLocation.replace(/\s+/g, "+"));
       locLink.attr("target", "_blank");
-      $("#restaurantinfo-div").append("<h1>" + data.results[randomInd].name + '</h1><br>');
+      $("#restaurantinfo-div").append("<h1>" + data.results[randomInd].name + '</h1>');
       var blnOpen = data.results[randomInd].opening_hours.open_now;
       if (blnOpen){
  $("#restaurantinfo-div").append("<b>Open Now? </b>" + "Yes<br>");
