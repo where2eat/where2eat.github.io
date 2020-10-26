@@ -181,6 +181,8 @@ function getCityID(inputCity) {
 }
 
 function getLocationID(long, lat) {
+  clearDiv("restaurantinfo-div");
+  clearDiv("cityinfo-div");
   spin();
    spin2();
 $.ajax( {
@@ -207,7 +209,6 @@ $("#restaurantinfo-div").append("<b>Open Now? </b>" + "No<br>");
       //"<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap button again for another eatery!</b></p>"
     }
 });
-  setTimeout(function(){ details(); }, 1000);
 }
 function details(){
    //console.log("https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc");
@@ -268,9 +269,9 @@ function clearDiv(elementID) {
             } 
         } 
 function showPosition(position) {
+ //document.body.style.cursor = 'wait';
 clearDiv("restaurantinfo-div");
 clearDiv("cityinfo-div");
- //document.body.style.cursor = 'wait';
 let gcityinfo = document.getElementById("cityinfo-div");
 gcityinfo.style.visibility = 'hidden'; //'hidden'
     let ginfo = document.getElementById("restaurantinfo-div");
@@ -285,7 +286,8 @@ spinner.style.visibility = 'visible'; //'hidden'
     console.log(long);
   //getLocationID(long, lat);
   setTimeout(getLocationID(long, lat),1000)
-  setTimeout(scrollToBottom,5000);
+  setTimeout(function(){ details(); }, 4000);
+  setTimeout(scrollToBottom,6000);
 }
 function getLocation() {
   if (navigator.geolocation) {
