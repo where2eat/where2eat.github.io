@@ -16,8 +16,8 @@ function generateNumbers()
             if(numbers.length==0)
             {
                 // then we've used  up all available numbers..start new game or whatever you need to do..
-                alert("starting again");
-               // generateNumbers();
+                //alert("starting again");
+                generateNumbers();
             }
             var rand = Math.floor(Math.random()*numbers.length); // select an index randomly based on the number of remaining available numbers..
             randomInd = numbers[rand];
