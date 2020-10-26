@@ -202,26 +202,40 @@ $.ajax( {
     url  : 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + lat + ',' +  long + '&radius=' + randomradius + '&type=restaurant&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc',
     success : function( data) {
         pids = data.results[randomInd].place_id;
-       // document.write(data.results[randomInd].name + '<br>');
-       // document.write(data.results[randomInd].vicinity + '<br>');
-       // document.write("<img src='https://maps.googleapis.com/maps/api/place/photo?photoreference=" + data.results[randomInd].photos[0].photo_reference + "&sensor=false&maxheight=225&maxwidth=225&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc'" + "/>");
-       var restLocation = data.results[randomInd].vicinity;
-       var city = restLocation.split(",");
+try {
+    var restLocation = data.results[randomInd].vicinity;
+      var city = restLocation.split(",");
        searchWeather(city[1].trim());
        console.log(city[1].trim());
        var locLink = $("<a>").text(restLocation);
         locLink.attr("href", "https://google.com/maps/place/" + restLocation.replace(/\s+/g, "+"));
       locLink.attr("target", "_blank");
-      $("#restaurantinfo-div").append("<h1>" + data.results[randomInd].name + '</h1>');
-      var blnOpen = data.results[randomInd].opening_hours.open_now;
+      $("#restaurantinfo-div").append(locLink);
+} catch (error) {
+    var restLocation = 'N/A';
+    var locLink = 'N/A';
+    $("#restaurantinfo-div").append(locLink);
+}
+try {
+    $("#restaurantinfo-div").append("<h1>" + data.results[randomInd].name + '</h1>');
+} catch (error) {
+    $("#restaurantinfo-div").append("<h1>" + 'N/A' + '</h1>');
+}
+try {
+         var blnOpen = data.results[randomInd].opening_hours.open_now;
       if (blnOpen){
  $("#restaurantinfo-div").append("<b>Open Now? </b>" + "Yes<br>");
       }else{
 $("#restaurantinfo-div").append("<b>Open Now? </b>" + "No<br>");
       }
-      
-      $("#restaurantinfo-div").append(locLink);
+} catch (error) {
+   $("#restaurantinfo-div").append("<b>Open Now? </b>" + "N/A<br>");
+}
+try {
       $("#restaurantinfo-div").append("<br><img src='https://maps.googleapis.com/maps/api/place/photo?photoreference=" + data.results[randomInd].photos[0].photo_reference + "&sensor=false&maxheight=225&maxwidth=225&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc'" + "/>");
+} catch (error) {
+     $("#restaurantinfo-div").append("No Photo<br>:);
+}
       //"<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap button again for another eatery!</b></p>"
     }
 });
@@ -232,9 +246,17 @@ function details(){
 $.ajax( {
     url  : "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number,website&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc",
     success : function( data) {
-       // document.write("<br>Phone: " + data.result.formatted_phone_number + '<br>');
-        $("#restaurantinfo-div").append("<br>Phone: " + data.result.formatted_phone_number + '<br>');
-         $("#restaurantinfo-div").append("website: <a href='" + data.result.website + "' target='_blank'>link</a><br>");
+try {
+       $("#restaurantinfo-div").append("<br>Phone: " + data.result.formatted_phone_number + '<br>');
+} catch (error) {
+       $("#restaurantinfo-div").append("<br>Phone: " + 'N/A' + '<br>');
+}
+try {
+               $("#restaurantinfo-div").append("website: <a href='" + data.result.website + "' target='_blank'>link</a><br>");
+} catch (error) {
+               $("#restaurantinfo-div").append("website: N/A <br>");
+}
+        
              $("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap the GO! button again for another eatery!</b></p>");
     }
 });
