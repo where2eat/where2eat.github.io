@@ -10,7 +10,7 @@ var restLocation = '';
 var restname = '';
 var blnOpen = true;
 var photoref = '';
-var city = '';    
+var city = [];    
 function generateNumbers()
         {
             // populate the available numbers however you need to..
