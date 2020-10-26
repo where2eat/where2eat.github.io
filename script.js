@@ -219,10 +219,10 @@ $.ajax( {
         var gphonenum = data.result.formatted_phone_number;
         var gwww = data.result.website;
         if (gwww != null || gwww != undefined){
-$("#restaurantinfo-div").append("<br>website: <a href='" + gwww + "' target='_blank'>link</a><br>");
+$("#restaurantinfo-div").append("website: <a href='" + gwww + "' target='_blank'>link</a><br>");
 }
 if (gphonenum != undefined || gphonenum != null){
-$("#restaurantinfo-div").append("<br>Phone: " + gphonenum + '<br>');
+$("#restaurantinfo-div").append("Phone: " + gphonenum + '<br>');
 }
 $("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap the GO! button again for another eatery!</b></p>");
     }
