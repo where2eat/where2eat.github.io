@@ -220,9 +220,9 @@ $.ajax( {
     success : function( data) {
         phonenum = data.result.formatted_phone_number;
         www = data.result.website;
-        console.log(www);
     }
 });
+console.log(www);        
 if (www !== null){
 $("#restaurantinfo-div").append("website: <a href='" + www + "' target='_blank'>link</a><br>");
 }
