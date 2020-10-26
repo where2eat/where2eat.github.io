@@ -212,7 +212,7 @@ $("#restaurantinfo-div").append("<b>Open Now? </b>" + "No<br>");
 });
 }
 function details(){
-var phonenum = 'N/A';
+var phonenum;
 var www;
    //console.log("https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc");
 $.ajax( {
@@ -223,10 +223,10 @@ $.ajax( {
         console.log(www);
     }
 });
-if (www){
+if (www !== null){
 $("#restaurantinfo-div").append("website: <a href='" + www + "' target='_blank'>link</a><br>");
 }
-if (phonenum !=  'N/A'){
+if (phonenum !== null){
 $("#restaurantinfo-div").append("<br>Phone: " + phonenum + '<br>');
 }
 $("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap the GO! button again for another eatery!</b></p>");
