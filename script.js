@@ -151,7 +151,7 @@ var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + lat + "&l
       searchWeather(inputCity);
    // document.getElementById('city-input').value = inputCity;
   });
-  var randomInd = Math.floor(Math.random() * 20);
+  var randomInd = Math.floor(Math.random() * 19) + 1;
    var randomradius = Math.floor(Math.random() * 15000) + 1500;
 $.ajax( {
     url  : 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + lat + ',' +  long + '&radius=' + randomradius + '&type=restaurant&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc',
