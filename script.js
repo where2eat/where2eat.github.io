@@ -37,7 +37,7 @@ function generateNumbers2()
         }
  function spin2()
         {
-            if(numbers.length==0)
+            if(ranges.length==0)
             {
                 // then we've used  up all available numbers..start new game or whatever you need to do..
                 //alert("starting again");
