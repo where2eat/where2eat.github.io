@@ -5,12 +5,6 @@ var numbers = [];
 var ranges = []; 
 var randomInd;
 var randomradius;
-var blnRun = true;
-var restLocation;
-var restname;
-var blnOpen;
-var photoref;  
-var mycity;
 function generateNumbers()
         {
             // populate the available numbers however you need to..
@@ -187,58 +181,60 @@ function getCityID(inputCity) {
 }
 
 function getLocationID(long, lat) {
-blnRun=true;    
-spin();
-spin2();
+// var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=" + lat + "&lon=" + long;
+//   $.ajax({
+//     url: queryURL,
+//     method: "GET",
+//     headers: {
+//       Accept: "application/json",
+//       "user-key": "e27ebe249bf6837584304788457085eb",
+//     },
+//   }).then(function (response) {
+//     console.log(response.location.city_id);
+//      var inputCity = response.location.city_name; //grabs the first location suggestion's ID
+//       searchWeather(inputCity);
+//   });
+ // var randomInd = Math.floor(Math.random() * 19) + 1;
+  spin();
+   spin2();
+   //var randomradius = Math.floor(Math.random() * 15000) + 1500;
 $.ajax( {
     url  : 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + lat + ',' +  long + '&radius=' + randomradius + '&type=restaurant&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc',
     success : function( data) {
-               try {
-       pids = data.results[randomInd].place_id;
-       restLocation = data.results[randomInd].vicinity;
-       restname = data.results[randomInd].name;
-       blnOpen = data.results[randomInd].opening_hours.open_now;
-       photoref = data.results[randomInd].photos[0].photo_reference;
+        pids = data.results[randomInd].place_id;
+       // document.write(data.results[randomInd].name + '<br>');
+       // document.write(data.results[randomInd].vicinity + '<br>');
+       // document.write("<img src='https://maps.googleapis.com/maps/api/place/photo?photoreference=" + data.results[randomInd].photos[0].photo_reference + "&sensor=false&maxheight=225&maxwidth=225&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc'" + "/>");
+       var restLocation = data.results[randomInd].vicinity;
        var city = restLocation.split(",");
-       mycity=city[1].trim();
-         } catch (error) {
-blnRun = false;
-}
-    }
-});
-if (blnRun){
-       searchWeather(mycity);
-       console.log(mycity);
+       searchWeather(city[1].trim());
+       console.log(city[1].trim());
        var locLink = $("<a>").text(restLocation);
-       locLink.attr("href", "https://google.com/maps/place/" + restLocation.replace(/\s+/g, "+"));
-       locLink.attr("target", "_blank");
- $("#restaurantinfo-div").append("<h1>" + restname + '</h1>');
+        locLink.attr("href", "https://google.com/maps/place/" + restLocation.replace(/\s+/g, "+"));
+      locLink.attr("target", "_blank");
+      $("#restaurantinfo-div").append("<h1>" + data.results[randomInd].name + '</h1>');
+      var blnOpen = data.results[randomInd].opening_hours.open_now;
       if (blnOpen){
  $("#restaurantinfo-div").append("<b>Open Now? </b>" + "Yes<br>");
       }else{
 $("#restaurantinfo-div").append("<b>Open Now? </b>" + "No<br>");
-      }            
+      }
+      
       $("#restaurantinfo-div").append(locLink);
-      $("#restaurantinfo-div").append("<br><img src='https://maps.googleapis.com/maps/api/place/photo?photoreference=" + photoref + "&sensor=false&maxheight=225&maxwidth=225&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc'" + "/>");                
-setTimeout(function(){ details(); }, 2000);
-}
+      $("#restaurantinfo-div").append("<br><img src='https://maps.googleapis.com/maps/api/place/photo?photoreference=" + data.results[randomInd].photos[0].photo_reference + "&sensor=false&maxheight=225&maxwidth=225&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc'" + "/>");
+      //"<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap button again for another eatery!</b></p>"
+    }
+});
+  setTimeout(function(){ details(); }, 1000);
 }
 function details(){
    //console.log("https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc");
 $.ajax( {
     url  : "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number,website&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc",
     success : function( data) {
-try {
-       $("#restaurantinfo-div").append("<br>Phone: " + data.result.formatted_phone_number + '<br>');
-} catch (error) {
-       $("#restaurantinfo-div").append("<br>Phone: " + 'N/A' + '<br>');
-}
-try {
-               $("#restaurantinfo-div").append("website: <a href='" + data.result.website + "' target='_blank'>link</a><br>");
-} catch (error) {
-               $("#restaurantinfo-div").append("website: N/A <br>");
-}
-        
+       // document.write("<br>Phone: " + data.result.formatted_phone_number + '<br>');
+        $("#restaurantinfo-div").append("<br>Phone: " + data.result.formatted_phone_number + '<br>');
+         $("#restaurantinfo-div").append("website: <a href='" + data.result.website + "' target='_blank'>link</a><br>");
              $("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap the GO! button again for another eatery!</b></p>");
     }
 });
@@ -292,9 +288,6 @@ function clearDiv(elementID) {
 function showPosition(position) {
 clearDiv("restaurantinfo-div");
 clearDiv("cityinfo-div");
-        //results-container
-let gresults = document.getElementById("results-container");
-gresults.style.visibility = 'hidden'; //'hidden'        
  //document.body.style.cursor = 'wait';
 let gcityinfo = document.getElementById("cityinfo-div");
 gcityinfo.style.visibility = 'hidden'; //'hidden'
@@ -308,8 +301,8 @@ spinner.style.visibility = 'visible'; //'hidden'
   var lat = position.coords.latitude;
   console.log(lat);
     console.log(long);
-  setTimeout(getLocationID(long, lat),1000);
-  setTimeout(scrollToBottom,4000);
+  getLocationID(long, lat);
+  setTimeout(scrollToBottom,3000);
 }
 function getLocation() {
   if (navigator.geolocation) {
@@ -329,6 +322,4 @@ btngo.style.visibility = 'visible'; //'hidden'
 ginfo.style.visibility = 'visible'; //'hidden'
 let gcityinfo = document.getElementById("cityinfo-div");
 gcityinfo.style.visibility = 'visible'; //'hidden'
-let gresults = document.getElementById("results-container");
-gresults.style.visibility = 'visible'; //'hidden'   
 }
