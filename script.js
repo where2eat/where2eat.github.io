@@ -224,9 +224,9 @@ $("#restaurantinfo-div").append("<br>website: <a href='" + gwww + "' target='_bl
 if (gphonenum != undefined || gphonenum != null){
 $("#restaurantinfo-div").append("<br>Phone: " + gphonenum + '<br>');
 }
+$("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap the GO! button again for another eatery!</b></p>");
     }
 });
-$("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap the GO! button again for another eatery!</b></p>");
 }
 function getZipCode(zip) {
   //function to extract cityID of user input from zomato api
