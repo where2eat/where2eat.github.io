@@ -9,8 +9,8 @@ var blnRun = true;
 var restLocation = '';
 var restname = '';
 var blnOpen = true;
-var photoref = '';
-var city;    
+var photoref = '';  
+var mycity='';
 function generateNumbers()
         {
             // populate the available numbers however you need to..
@@ -199,16 +199,16 @@ $.ajax( {
        restname = data.results[randomInd].name;
        blnOpen = data.results[randomInd].opening_hours.open_now;
        photoref = data.results[randomInd].photos[0].photo_reference;
-       city = restLocation.split(",");
-     
+       var city = restLocation.split(",");
+       mycity=city[1].trim();
          } catch (error) {
 blnRun = false;
 }
     }
 });
 if (blnRun){
-  searchWeather(city[1].trim());
-       console.log(city[1].trim());
+       searchWeather(mycity);
+       console.log(mycity);
        var locLink = $("<a>").text(restLocation);
        locLink.attr("href", "https://google.com/maps/place/" + restLocation.replace(/\s+/g, "+"));
        locLink.attr("target", "_blank");
