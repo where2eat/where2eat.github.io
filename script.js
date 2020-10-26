@@ -269,9 +269,12 @@ function clearDiv(elementID) {
             } 
         } 
 function showPosition(position) {
- //document.body.style.cursor = 'wait';
+//results-container
+        
 clearDiv("restaurantinfo-div");
 clearDiv("cityinfo-div");
+let gresultsinfo = document.getElementById("results-container");
+gresultsinfo.style.visibility = 'hidden'; //'hidden'
 let gcityinfo = document.getElementById("cityinfo-div");
 gcityinfo.style.visibility = 'hidden'; //'hidden'
     let ginfo = document.getElementById("restaurantinfo-div");
@@ -286,8 +289,8 @@ spinner.style.visibility = 'visible'; //'hidden'
     console.log(long);
   //getLocationID(long, lat);
   setTimeout(getLocationID(long, lat),1000)
-  setTimeout(function(){ details(); }, 4000);
-  setTimeout(scrollToBottom,6000);
+  setTimeout(function(){ details(); }, 5000);
+  setTimeout(scrollToBottom,7000);
 }
 function getLocation() {
   if (navigator.geolocation) {
@@ -307,4 +310,6 @@ btngo.style.visibility = 'visible'; //'hidden'
 ginfo.style.visibility = 'visible'; //'hidden'
 let gcityinfo = document.getElementById("cityinfo-div");
 gcityinfo.style.visibility = 'visible'; //'hidden'
+let gresultsinfo = document.getElementById("results-container");
+gresultsinfo.style.visibility = 'hidden'; //'hidden'
 }
