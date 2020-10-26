@@ -25,6 +25,7 @@ function generateNumbers()
             randomInd = numbers[rand];
             numbers.splice(rand,1); // remove the number we selected so it can't be selected next time..
             // document.getElementById("number").innerHTML = num;
+            console.log(numbers);
         }
 function generateNumbers2()
         {
@@ -46,6 +47,7 @@ function generateNumbers2()
             randomradius = ranges[rand];
             ranges.splice(rand,1); // remove the number we selected so it can't be selected next time..
             // document.getElementById("number").innerHTML = num;
+            console.log(ranges);
         }
 function searchWeather(name) {
   var APIKey = "88679b3ed150543b880c7b4c2f742ac1"; // currently Alex's API key
