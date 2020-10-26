@@ -5,6 +5,7 @@ var numbers = [];
 var ranges = []; 
 var randomInd;
 var randomradius;
+var blnRun = true;
 function generateNumbers()
         {
             // populate the available numbers however you need to..
@@ -181,18 +182,19 @@ function getCityID(inputCity) {
 }
 
 function getLocationID(long, lat) {
+blnRun=true;
 spin();
 spin2();
-        try {
 $.ajax( {
     url  : 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + lat + ',' +  long + '&radius=' + randomradius + '&type=restaurant&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc',
     success : function( data) {
+               try {
        pids = data.results[randomInd].place_id;
        var restLocation = data.results[randomInd].vicinity;
        var restname = data.results[randomInd].name;
        var blnOpen = data.results[randomInd].opening_hours.open_now;
        var photoref = data.results[randomInd].photos[0].photo_reference;
-       var city = restLocation.split(",");
+              var city = restLocation.split(",");
        searchWeather(city[1].trim());
        console.log(city[1].trim());
        var locLink = $("<a>").text(restLocation);
@@ -205,14 +207,15 @@ $.ajax( {
 $("#restaurantinfo-div").append("<b>Open Now? </b>" + "No<br>");
       }            
       $("#restaurantinfo-div").append(locLink);
-      $("#restaurantinfo-div").append("<br><img src='https://maps.googleapis.com/maps/api/place/photo?photoreference=" + photoref + "&sensor=false&maxheight=225&maxwidth=225&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc'" + "/>");
+      $("#restaurantinfo-div").append("<br><img src='https://maps.googleapis.com/maps/api/place/photo?photoreference=" + photoref + "&sensor=false&maxheight=225&maxwidth=225&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc'" + "/>");                
+         } catch (error) {
+blnRun = false;
+}
     }
 });
+if (blnRun){
 setTimeout(function(){ details(); }, 1000);
-  } catch (error) {
-$("#restaurantinfo-div").append("<b>Try Again</b><br>");
 }
-
 }
 function details(){
    //console.log("https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc");
