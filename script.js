@@ -194,7 +194,6 @@ $.ajax( {
         var restLocation = data.results[randomInd].vicinity;
        var city = restLocation.split(",");
        searchWeather(city[1].trim());
-       console.log(city[1].trim());
        var locLink = $("<a>").text(restLocation);
         locLink.attr("href", "https://google.com/maps/place/" + restLocation.replace(/\s+/g, "+"));
       locLink.attr("target", "_blank");
@@ -213,16 +212,23 @@ $("#restaurantinfo-div").append("<b>Open Now? </b>" + "No<br>");
 });
 }
 function details(){
+var phonenum = 'N/A';
+var www = 'N/A';
    //console.log("https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc");
 $.ajax( {
     url  : "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number,website&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc",
     success : function( data) {
-       // document.write("<br>Phone: " + data.result.formatted_phone_number + '<br>');
-        $("#restaurantinfo-div").append("<br>Phone: " + data.result.formatted_phone_number + '<br>');
-         $("#restaurantinfo-div").append("website: <a href='" + data.result.website + "' target='_blank'>link</a><br>");
-             $("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap the GO! button again for another eatery!</b></p>");
+        phonenum = data.result.formatted_phone_number;
+        www = data.result.website
     }
 });
+if (www !=  'N/A'){
+$("#restaurantinfo-div").append("website: <a href='" + data.result.website + "' target='_blank'>link</a><br>");
+}
+if (phonenum !=  'N/A'){
+$("#restaurantinfo-div").append("<br>Phone: " + phonenum + '<br>');
+}
+$("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap the GO! button again for another eatery!</b></p>");
 }
 function getZipCode(zip) {
   //function to extract cityID of user input from zomato api
