@@ -1,4 +1,8 @@
-//Where2Eat
+//Where2Eat\
+var myFun1;
+var myFun2;
+blnGo1 = false;
+blnGo2 = false;
 var pids='';
 var cityname;
 var numbers = []; 
@@ -7,6 +11,22 @@ var randomInd;
 var randomradius;
 let gresultsinfo = document.getElementById("results-container");
 gresultsinfo.style.visibility = 'hidden'; //'hidden'
+function timer1(){
+    if (blnGo1) { 
+        blnGo1 = false;
+        clearInterval(myFun1);    
+        alert("timer1");
+        details();    
+    } 
+}
+function timer2(){
+    if (blnGo2) { 
+        blnGo2 = false;
+        clearInterval(myFun2); 
+        alert("timer2");
+        scrollToBottom();      
+    } 
+}
 function generateNumbers()
         {
             // populate the available numbers however you need to..
@@ -138,6 +158,7 @@ $("#restaurantinfo-div").append("<b>Open Now? </b>" + "No<br>");
       }
     }
 });
+blnGo1 = true;
 }
 function details(){
 $.ajax( {
@@ -154,6 +175,7 @@ $("#restaurantinfo-div").append("<a href='tel:" + gphonenum + "'>" + gphonenum +
 $("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap the GO! button again for another eatery!</b></p>");
     }
 });
+blnGo2 = true;
 }
 function getZipCode(zip) {
 var queryURL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=" + zip;
@@ -189,8 +211,10 @@ clearDiv("cityinfo-div");
   var long = position.coords.longitude;
   var lat = position.coords.latitude;
   setTimeout(getLocationID(long, lat),1000)
-  setTimeout(function(){ details(); }, 5000);
-  setTimeout(scrollToBottom,7000);
+  //setTimeout(function(){ details(); }, 5000);
+  //setTimeout(scrollToBottom,7000);
+  myFun1 = setInterval(timer1, 1000);
+  myFun2 = setInterval(timer2, 1000);
 }
 function getLocation() {
   if (navigator.geolocation) {
