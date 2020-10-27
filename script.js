@@ -274,23 +274,20 @@ function clearDiv(elementID) {
             } 
         } 
 function showPosition(position) {
+let btngo = document.getElementById("go");  
+btngo.style.visibility = 'hidden'; //'hidden'
+let ginfo = document.getElementById("restaurantinfo-div");
 ginfo.style.visibility = 'hidden'; //'hidden'
-let btngo = document.getElementById("go");       
-clearDiv("restaurantinfo-div");
-clearDiv("cityinfo-div");
 let gresultsinfo = document.getElementById("results-container");
 gresultsinfo.style.visibility = 'hidden'; //'hidden'
 let gcityinfo = document.getElementById("cityinfo-div");
 gcityinfo.style.visibility = 'hidden'; //'hidden'
-    let ginfo = document.getElementById("restaurantinfo-div");
-btngo.style.visibility = 'hidden'; //'hidden'
  let spinner = document.getElementById("loading");
 spinner.style.visibility = 'visible'; //'hidden'
+clearDiv("restaurantinfo-div");
+clearDiv("cityinfo-div");
   var long = position.coords.longitude;
   var lat = position.coords.latitude;
-  console.log(lat);
-    console.log(long);
-  //getLocationID(long, lat);
   setTimeout(getLocationID(long, lat),1000)
   setTimeout(function(){ details(); }, 5000);
   setTimeout(scrollToBottom,7000);
