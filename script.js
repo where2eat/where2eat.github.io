@@ -211,10 +211,9 @@ clearDiv("cityinfo-div");
   var long = position.coords.longitude;
   var lat = position.coords.latitude;
   setTimeout(getLocationID(long, lat),1000)
+  setTimeout(details, 5000);
   //setTimeout(function(){ details(); }, 5000);
-  //setTimeout(scrollToBottom,7000);
-  myFun1 = setInterval(timer1, 1000);
-  myFun2 = setInterval(timer2, 1000);
+  setTimeout(scrollToBottom,7000);
 }
 function getLocation() {
   if (navigator.geolocation) {
