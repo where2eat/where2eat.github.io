@@ -143,7 +143,7 @@ $.ajax( {
         var restLocation = data.results[randomInd].vicinity;
        var city = restLocation.split(",");
        var maxcity = Math.max.apply(null, city); 
-       console.log(city[maxcity].trim());
+       console.log(maxcity);
        searchWeather(city[maxcity].trim());
        var locLink = $("<a>").text(restLocation);
         locLink.attr("href", "https://google.com/maps/place/" + restLocation.replace(/\s+/g, "+"));
