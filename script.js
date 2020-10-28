@@ -162,9 +162,9 @@ $.ajax( {
       }else{
 $("#restaurantinfo-div").append("<b>Open Now? </b>" + "No");
       }
+      $("#restaurantinfo-div").append("<br>");
     }
 });
-$("#restaurantinfo-div").append("<br>");
 }
 function details(){
 $.ajax( {
