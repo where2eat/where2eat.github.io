@@ -47,7 +47,7 @@ function generateNumbers()
             randomInd = numbers[rand];
             numbers.splice(rand,1); // remove the number we selected so it can't be selected next time..
             // document.getElementById("number").innerHTML = num;
-            //console.log(numbers);
+            console.log(numbers);
         }
 function generateNumbers2()
         {
@@ -69,7 +69,7 @@ function generateNumbers2()
             randomradius = ranges[rand];
             ranges.splice(rand,1); // remove the number we selected so it can't be selected next time..
             // document.getElementById("number").innerHTML = num;
-            //console.log(ranges);
+            console.log(ranges);
         }
 function searchWeather(name) {
   var APIKey = "88679b3ed150543b880c7b4c2f742ac1"; // currently Alex's API key
@@ -144,18 +144,18 @@ $.ajax( {
         var restLocation = data.results[randomInd].vicinity;
        var city = restLocation.split(",");
        searchWeather(city[city.length - 1].trim());
-       // console.log(city[city.length - 1].trim());
+       console.log(city[city.length - 1].trim());
        var locLink = $("<a>").text(restLocation);
         locLink.attr("href", "https://google.com/maps/place/" + restLocation.replace(/\s+/g, "+"));
       locLink.attr("target", "_blank");
       $("#restaurantinfo-div").append("<h1>" + data.results[randomInd].name + "</h1>");
-      // console.log(randomradius);
-      //console.log(data.results[0].name);
+      console.log(randomradius);
+      console.log(data.results[0].name);
      try {
- // console.log(data.results[19].name);
+      console.log(data.results[19].name);
 }
 catch(err) {
-  //console.log(err.message);
+  console.log(err.message);
 }
       $("#restaurantinfo-div").append(locLink);
       $("#restaurantinfo-div").append("<br>");
@@ -169,7 +169,7 @@ catch(err) {
       $("#restaurantinfo-div").append("<br>");
       try {
         var blnOpen = data.results[randomInd].opening_hours.open_now;
-      //console.log(blnOpen);
+      console.log(blnOpen);
       if (blnOpen){
  $("#restaurantinfo-div").append("<b>Open Now? </b>" + "Yes");
       }else{
