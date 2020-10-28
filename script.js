@@ -146,7 +146,7 @@ $.ajax( {
        var locLink = $("<a>").text(restLocation);
         locLink.attr("href", "https://google.com/maps/place/" + restLocation.replace(/\s+/g, "+"));
       locLink.attr("target", "_blank");
-      $("#restaurantinfo-div").append("<h1>" + data.results[randomInd].name + '</h1>');
+      $("#restaurantinfo-div").append("<h1>" + data.results[randomInd].name + "</h1>");
       $("#restaurantinfo-div").append(locLink);
       $("#restaurantinfo-div").append("<br>");
         //<br>
@@ -160,9 +160,8 @@ $.ajax( {
 $("#restaurantinfo-div").append("<b>Open Now? </b>" + "No");
       }
     }
-          $("#restaurantinfo-div").append("<br>");
 });
-blnGo1 = true;
+$("#restaurantinfo-div").append("<br>");
 }
 function details(){
 $.ajax( {
