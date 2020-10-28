@@ -148,15 +148,19 @@ $.ajax( {
       locLink.attr("target", "_blank");
       $("#restaurantinfo-div").append("<h1>" + data.results[randomInd].name + '</h1>');
       $("#restaurantinfo-div").append(locLink);
-      $("#restaurantinfo-div").append("<br><img src='https://maps.googleapis.com/maps/api/place/photo?photoreference=" + data.results[randomInd].photos[0].photo_reference + "&sensor=false&maxheight=225&maxwidth=225&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc'" + "/><br>");
-       var blnOpen = data.results[randomInd].opening_hours.open_now;
+      $("#restaurantinfo-div").append("<br>");
+        //<br>
+      $("#restaurantinfo-div").append("<img src='https://maps.googleapis.com/maps/api/place/photo?photoreference=" + data.results[randomInd].photos[0].photo_reference + "&sensor=false&maxheight=225&maxwidth=225&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc'" + "/>");
+      $("#restaurantinfo-div").append("<br>");
+        var blnOpen = data.results[randomInd].opening_hours.open_now;
       console.log(blnOpen);
       if (blnOpen){
- $("#restaurantinfo-div").append("<b>Open Now? </b>" + "Yes<br>");
+ $("#restaurantinfo-div").append("<b>Open Now? </b>" + "Yes");
       }else{
-$("#restaurantinfo-div").append("<b>Open Now? </b>" + "No<br>");
+$("#restaurantinfo-div").append("<b>Open Now? </b>" + "No");
       }
     }
+          $("#restaurantinfo-div").append("<br>");
 });
 blnGo1 = true;
 }
@@ -166,13 +170,15 @@ $.ajax( {
     success : function( data) {
         var gphonenum = data.result.formatted_phone_number;
         var gwww = data.result.website;
-        if (gwww != null || gwww != undefined){
-$("#restaurantinfo-div").append("website: <a href='" + gwww + "' target='_blank'>link</a><br>");
+if (gwww != null || gwww != undefined){
+$("#restaurantinfo-div").append("website: <a href='" + gwww + "' target='_blank'>link</a>");
 }
+$("#restaurantinfo-div").append("<br>");
 if (gphonenum != undefined || gphonenum != null){
-$("#restaurantinfo-div").append("<a href='tel:" + gphonenum + "'>" + gphonenum + "</a><br>");
+$("#restaurantinfo-div").append("<a href='tel:" + gphonenum + "'>" + gphonenum + "</a>");
 }
-$("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap the GO! button again for another eatery!</b></p>");
+$("#restaurantinfo-div").append("<br>");
+$("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap GO! button above for another eatery!</b></p>");
     }
 });
 blnGo2 = true;
