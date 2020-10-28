@@ -235,19 +235,14 @@ function showPosition(position) {
 spinner.style.visibility = 'visible'; //'hidden'
 let btngo = document.getElementById("go");  
 btngo.style.visibility = 'hidden'; //'hidden'
-// let ginfo = document.getElementById("restaurantinfo-div");
-// ginfo.style.visibility = 'hidden'; //'hidden'
-let gresultsinfo = document.getElementById("results-container");
-gresultsinfo.style.visibility = 'hidden'; //'hidden'
-// let gcityinfo = document.getElementById("cityinfo-div");
-// gcityinfo.style.visibility = 'hidden'; //'hidden'
 clearDiv("restaurantinfo-div");
 clearDiv("cityinfo-div");
+let gresultsinfo = document.getElementById("results-container");
+gresultsinfo.style.visibility = 'hidden'; //'hidden'
   var long = position.coords.longitude;
   var lat = position.coords.latitude;
   setTimeout(getLocationID(long, lat),2000)
   setTimeout(details, 7000);
-  //setTimeout(function(){ details(); }, 5000);
   setTimeout(scrollToBottom,11000);
 }
 function getLocation() {
@@ -258,16 +253,11 @@ function getLocation() {
   }
 }
 function scrollToBottom() {
-         window.scrollTo(0, document.body.scrollHeight);
-         //document.body.style.cursor = 'default';
-   let spinner = document.getElementById("loading");
-spinner.style.visibility = 'hidden'; //'hidden'
-//   let ginfo = document.getElementById("restaurantinfo-div");
-// ginfo.style.visibility = 'visible'; //'hidden'
-// let gcityinfo = document.getElementById("cityinfo-div");
-// gcityinfo.style.visibility = 'visible'; //'hidden'
-    let btngo = document.getElementById("go");
-btngo.style.visibility = 'visible'; //'hidden'
-    let gresultsinfo = document.getElementById("results-container");
+let gresultsinfo = document.getElementById("results-container");
 gresultsinfo.style.visibility = 'visible'; //'hidden'
+let btngo = document.getElementById("go");
+btngo.style.visibility = 'visible'; //'hidden'
+let spinner = document.getElementById("loading");
+spinner.style.visibility = 'hidden'; //'hidden'
+window.scrollTo(0, document.body.scrollHeight);
 }
