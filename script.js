@@ -193,14 +193,14 @@ function details(){
     var gphone = data.result.formatted_phone_number;
     var gwww = data.result.website;
 
-        if (gwww === 'undefined'){
+        if (gwww === undefined || gwww === null){
             $("#restaurantinfo-div").append("[NO WEBSITE FOUND]");
         }else{
             $("#restaurantinfo-div").append("website: <a href='" + gwww + "' target='_blank'>link</a>");
         }
 $("#restaurantinfo-div").append("<br>");
 
-            if (gphone  === 'undefined'){
+            if (gphone  === undefined || gphone  === null){
             $("#restaurantinfo-div").append("[NO PHONE NUMBER FOUND]");
         }else{
             $("#restaurantinfo-div").append("<a href='tel:" + gphone + "'>" + gphone + "</a>");
