@@ -149,7 +149,12 @@ $.ajax( {
       $("#restaurantinfo-div").append("<h1>" + data.results[randomInd].name + "</h1>");
        console.log(randomradius);
       console.log(data.results[0].name);
-      console.log(data.results[19].name);
+     try {
+  console.log(data.results[19].name);
+}
+catch(err) {
+  console.log(err.message);
+}
       $("#restaurantinfo-div").append(locLink);
       $("#restaurantinfo-div").append("<br>");
         //<br>
