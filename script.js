@@ -30,7 +30,7 @@ function timer2(){
 function generateNumbers()
         {
             // populate the available numbers however you need to..
-            for(var i=1; i<20; i+=1)
+            for(var i=0; i<20; i+=1)
             {
                 numbers.push(i);
             }
@@ -147,6 +147,8 @@ $.ajax( {
         locLink.attr("href", "https://google.com/maps/place/" + restLocation.replace(/\s+/g, "+"));
       locLink.attr("target", "_blank");
       $("#restaurantinfo-div").append("<h1>" + data.results[randomInd].name + "</h1>");
+      console.log(data.results[0].name);
+      console.log(data.results[19].name);
       $("#restaurantinfo-div").append(locLink);
       $("#restaurantinfo-div").append("<br>");
         //<br>
