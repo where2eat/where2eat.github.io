@@ -158,7 +158,12 @@ catch(err) {
       $("#restaurantinfo-div").append(locLink);
       $("#restaurantinfo-div").append("<br>");
         //<br>
-      $("#restaurantinfo-div").append("<img src='https://maps.googleapis.com/maps/api/place/photo?photoreference=" + data.results[randomInd].photos[0].photo_reference + "&sensor=false&maxheight=225&maxwidth=225&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc'" + "/>");
+           try {
+       $("#restaurantinfo-div").append("<img src='https://maps.googleapis.com/maps/api/place/photo?photoreference=" + data.results[randomInd].photos[0].photo_reference + "&sensor=false&maxheight=225&maxwidth=225&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc'" + "/>");
+}
+catch(err) {
+   $("#restaurantinfo-div").append("[NO IMAGE FOUND]");
+}
       $("#restaurantinfo-div").append("<br>");
       try {
         var blnOpen = data.results[randomInd].opening_hours.open_now;
