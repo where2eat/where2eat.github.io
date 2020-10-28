@@ -147,6 +147,7 @@ $.ajax( {
         locLink.attr("href", "https://google.com/maps/place/" + restLocation.replace(/\s+/g, "+"));
       locLink.attr("target", "_blank");
       $("#restaurantinfo-div").append("<h1>" + data.results[randomInd].name + "</h1>");
+       console.log(randomradius);
       console.log(data.results[0].name);
       console.log(data.results[19].name);
       $("#restaurantinfo-div").append(locLink);
