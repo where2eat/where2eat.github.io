@@ -160,6 +160,7 @@ catch(err) {
         //<br>
       $("#restaurantinfo-div").append("<img src='https://maps.googleapis.com/maps/api/place/photo?photoreference=" + data.results[randomInd].photos[0].photo_reference + "&sensor=false&maxheight=225&maxwidth=225&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc'" + "/>");
       $("#restaurantinfo-div").append("<br>");
+      try {
         var blnOpen = data.results[randomInd].opening_hours.open_now;
       console.log(blnOpen);
       if (blnOpen){
@@ -167,6 +168,10 @@ catch(err) {
       }else{
 $("#restaurantinfo-div").append("<b>Open Now? </b>" + "No");
       }
+}
+catch(err) {
+   $("#restaurantinfo-div").append("<b>Open Now? </b>" + "N/A");
+}
       $("#restaurantinfo-div").append("<br>");
     }
 });
