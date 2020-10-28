@@ -191,14 +191,22 @@ function details(){
     url  : "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number,website&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc",
     success : function( data) {
     try{
-$("#restaurantinfo-div").append("website: <a href='" + data.result.website + "' target='_blank'>link</a>");
+        if (data.result.website === 'undefined'){
+            $("#restaurantinfo-div").append("[NO WEBSITE FOUND]");
+        }else{
+            $("#restaurantinfo-div").append("website: <a href='" + data.result.website + "' target='_blank'>link</a>");
+        }
 }
 catch(err) {
    $("#restaurantinfo-div").append("[NO WEBSITE FOUND]");
 }
 $("#restaurantinfo-div").append("<br>");
 try{
-$("#restaurantinfo-div").append("<a href='tel:" + data.result.formatted_phone_number + "'>" + data.result.formatted_phone_number + "</a>");
+            if (data.result.formatted_phone_number  === 'undefined'){
+            $("#restaurantinfo-div").append("[NO PHONE NUMBER FOUND]");
+        }else{
+            $("#restaurantinfo-div").append("<a href='tel:" + data.result.formatted_phone_number + "'>" + data.result.formatted_phone_number + "</a>");
+        }
 }
 catch(err) {
    $("#restaurantinfo-div").append("[NO PHONE NUMBER FOUND]");
