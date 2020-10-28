@@ -190,14 +190,18 @@ function details(){
         $.ajax( {
     url  : "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number,website&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc",
     success : function( data) {
-        var gphonenum = data.result.formatted_phone_number;
-        var gwww = data.result.website;
-if (gwww != null || gwww != undefined){
-$("#restaurantinfo-div").append("website: <a href='" + gwww + "' target='_blank'>link</a>");
+    try{
+$("#restaurantinfo-div").append("website: <a href='" + data.result.website + "' target='_blank'>link</a>");
+}
+catch(err) {
+   $("#restaurantinfo-div").append("[NO WEBSITE FOUND]");
 }
 $("#restaurantinfo-div").append("<br>");
-if (gphonenum != undefined || gphonenum != null){
-$("#restaurantinfo-div").append("<a href='tel:" + gphonenum + "'>" + gphonenum + "</a>");
+try{
+$("#restaurantinfo-div").append("<a href='tel:" + data.result.formatted_phone_number + "'>" + data.result.formatted_phone_number + "</a>");
+}
+catch(err) {
+   $("#restaurantinfo-div").append("[NO PHONE NUMBER FOUND]");
 }
 $("#restaurantinfo-div").append("<br>");
 $("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap GO! button above for another eatery!</b></p>");
