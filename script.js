@@ -142,7 +142,9 @@ $.ajax( {
         pids = data.results[randomInd].place_id;
         var restLocation = data.results[randomInd].vicinity;
        var city = restLocation.split(",");
-       searchWeather(city[1].trim());
+       var maxcity = Math.max.apply(null, city); 
+       console.log(city[maxcity].trim());
+       searchWeather(city[maxcity].trim());
        var locLink = $("<a>").text(restLocation);
         locLink.attr("href", "https://google.com/maps/place/" + restLocation.replace(/\s+/g, "+"));
       locLink.attr("target", "_blank");
