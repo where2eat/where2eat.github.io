@@ -245,10 +245,10 @@ clearDiv("restaurantinfo-div");
 clearDiv("cityinfo-div");
   var long = position.coords.longitude;
   var lat = position.coords.latitude;
-  setTimeout(getLocationID(long, lat),1000)
-  setTimeout(details, 5000);
+  setTimeout(getLocationID(long, lat),2000)
+  setTimeout(details, 7000);
   //setTimeout(function(){ details(); }, 5000);
-  setTimeout(scrollToBottom,9000);
+  setTimeout(scrollToBottom,11000);
 }
 function getLocation() {
   if (navigator.geolocation) {
