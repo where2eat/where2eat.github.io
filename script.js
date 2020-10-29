@@ -52,7 +52,7 @@ function generateNumbers()
 function generateNumbers2()
         {
             // populate the available numbers however you need to..
-            for(var i=1500; i<7500; i+=500)
+            for(var i=1500; i<8500; i+=300)
             {
                 ranges.push(i);
             }
