@@ -206,7 +206,6 @@ $("#restaurantinfo-div").append("<br>");
             $("#restaurantinfo-div").append("<a href='tel:" + gphone + "'>" + gphone + "</a>");
         }
 $("#restaurantinfo-div").append("<br>");
-$("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap GO! button above for another eatery!</b></p>");
     }
 });
 }
@@ -253,6 +252,7 @@ function getLocation() {
   }
 }
 function scrollToBottom() {
+$("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap GO! button above for another eatery!</b></p>");
 let gresultsinfo = document.getElementById("results-container");
 gresultsinfo.style.visibility = 'visible'; //'hidden'
 let btngo = document.getElementById("go");
