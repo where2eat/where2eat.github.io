@@ -240,8 +240,8 @@ let gresultsinfo = document.getElementById("results-container");
 gresultsinfo.style.visibility = 'hidden'; //'hidden'
   var long = position.coords.longitude;
   var lat = position.coords.latitude;
-  setTimeout(getLocationID(long, lat),2000)
-  setTimeout(details, 7000);
+  setTimeout(getLocationID(long, lat),1000)
+  setTimeout(details, 6000);
   setTimeout(scrollToBottom,11000);
 }
 function getLocation() {
