@@ -136,9 +136,14 @@ function getLocationID(long, lat) {
   clearDiv("cityinfo-div");
   spin();
    spin2();
-$.ajax( {
-    url  : 'https://corsanywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + lat + ',' +  long + '&radius=' + randomradius + '&type=restaurant&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc',
-    success : function( data) {
+$.ajax({
+        type: 'GET',
+        url: 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + lat + ',' +  long + '&radius=' + randomradius + '&type=restaurant&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc',
+        async: false,
+        jsonpCallback: 'jsonCallback',
+        contentType: "application/json",
+        dataType: 'jsonp',
+       success : function( data) {
         pids = '';
         pids = data.results[randomInd].place_id;
         var restLocation = data.results[randomInd].vicinity;
