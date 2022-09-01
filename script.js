@@ -66,7 +66,7 @@ function generateNumbers2()
                 generateNumbers2();
             }
             var rand = Math.floor(Math.random()*ranges.length); // select an index randomly based on the number of remaining available numbers..
-            randomradius = ranges[rand];
+            randomradius = 1000; //ranges[rand];
             ranges.splice(rand,1); // remove the number we selected so it can't be selected next time..
             // document.getElementById("number").innerHTML = num;
             console.log(ranges);
