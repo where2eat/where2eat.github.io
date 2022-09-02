@@ -66,7 +66,7 @@ function generateNumbers2()
                 generateNumbers2();
             }
             var rand = Math.floor(Math.random()*ranges.length); // select an index randomly based on the number of remaining available numbers..
-            randomradius = 1000; //ranges[rand];
+            randomradius = ranges[rand];
             ranges.splice(rand,1); // remove the number we selected so it can't be selected next time..
             // document.getElementById("number").innerHTML = num;
             console.log(ranges);
@@ -136,14 +136,9 @@ function getLocationID(long, lat) {
   clearDiv("cityinfo-div");
   spin();
    spin2();
-$.ajax({
-        type: 'GET',
-        url: 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + lat + ',' +  long + '&radius=' + randomradius + '&type=restaurant&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc',
-        async: false,
-        jsonpCallback: 'jsonCallback',
-        contentType: "application/json",
-        dataType: 'jsonp',
-       success : function( data) {
+$.ajax( {
+    url  : 'https://corsanywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + lat + ',' +  long + '&radius=' + randomradius + '&type=restaurant&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc',
+    success : function( data) {
         pids = '';
         pids = data.results[randomInd].place_id;
         var restLocation = data.results[randomInd].vicinity;
