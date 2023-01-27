@@ -1,4 +1,6 @@
-//Where2Eat\
+//Where2Eat
+//Created: Professor Chuck Konkol
+//Updated: 1/1/2021
 var myFun1;
 var myFun2;
 blnGo1 = false;
@@ -39,8 +41,7 @@ function generateNumbers()
         {
             if(numbers.length==0)
             {
-                // then we've used  up all available numbers..start new game or whatever you need to do..
-               // alert("starting again");
+                // get rand nums
                generateNumbers();
             }
             var rand = Math.floor(Math.random()*numbers.length); // select an index randomly based on the number of remaining available numbers..
@@ -51,8 +52,8 @@ function generateNumbers()
         }
 function generateNumbers2()
         {
-            // populate the available numbers however you need to..
-            for(var i=1500; i<11100; i+=500)
+            // up to 20 miles
+            for(var i=1500; i<32187; i+=500)
             {
                 ranges.push(i);
             }
