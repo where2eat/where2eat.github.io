@@ -261,6 +261,6 @@ let spinner = document.getElementById("loading");
 spinner.style.visibility = 'hidden'; //'hidden'
 window.scrollTo(0, document.body.scrollHeight);
     //<a href='javascript:getLocation();'>Here</a>
-$("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Click <a href='javascript:getLocation();'>HERE</a> search again!</b></p>");
+$("#restaurantinfo-div").append("<br><p style='background-color:lightgreen;color:#FFFFFF'><b>Click <a href='javascript:getLocation();'>HERE</a> search again!</b></p>");
 //$("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap GO! button above for another eatery!</b></p>");
 }
