@@ -259,7 +259,7 @@ let btngo = document.getElementById("go");
 btngo.style.visibility = 'visible'; //'hidden'
 let spinner = document.getElementById("loading");
 spinner.style.visibility = 'hidden'; //'hidden'
-window.scrollTo(0, document.body.scrollHeight-20);
+window.scrollTo(0, document.body.scrollHeight);
     //<a href='javascript:getLocation();'>Here</a>
 $("#restaurantinfo-div").append("<br><button class='button' id='go' onclick='getLocation()'>Search Again!</button>");
 //$("#restaurantinfo-div").append("<br><p style='background-color:#64A7FE;color:#FFFFFF'><b>Tap GO! button above for another eatery!</b></p>");
