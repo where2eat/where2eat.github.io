@@ -87,7 +87,7 @@ function searchWeather(name) {
     url: queryURL,
     method: "GET",
     error: function(e) {
-    alert('No restaurants found, please try again!');
+    alert('Issue finding weather, stll searching local eateries!');
     },
   }).then(function (response) {
     var cityName = $("<h1>").text(response.name); // creating the variable for city name
