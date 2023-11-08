@@ -1,6 +1,6 @@
 //Where2Eat
 //Created: Professor Chuck Konkol
-//Updated: 1/1/2021
+//Updated: 11/8/2023
 var myFun1;
 var myFun2;
 blnGo1 = false;
