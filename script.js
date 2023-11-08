@@ -138,7 +138,8 @@ function getLocationID(long, lat) {
   spin();
    spin2();
 $.ajax( {
-    url  : 'https://corsanywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + lat + ',' +  long + '&radius=' + randomradius + '&type=restaurant&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc',
+    //url  : 'https://corsanywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + lat + ',' +  long + '&radius=' + randomradius + '&type=restaurant&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc',
+    url  : 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + lat + ',' +  long + '&radius=' + randomradius + '&type=restaurant&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc',
     success : function( data) {
         pids = '';
         pids = data.results[randomInd].place_id;
@@ -189,7 +190,8 @@ function details(){
         $("#restaurantinfo-div").append("Please Try Again!");
     }else{
         $.ajax( {
-    url  : "https://corsanywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number,website&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc",
+     //url  : "https://corsanywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number,website&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc",
+     url  : "https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pids + "&fields=formatted_phone_number,website&key=AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc",
     success : function( data) {
     var gphone = data.result.formatted_phone_number;
     var gwww = data.result.website;
