@@ -103,9 +103,9 @@ function setWeatherBackground(main) {
   $("body").css("background-image", "url(" + (map[main] || "./Assets/food.jpg") + ")");
 }
 
-// ─── Proxy helper (allorigins works with Google REST) ────────────────
+// ─── Proxy helper (cors.dev works with Google REST + CORS) ───────────
 function proxyUrl(raw) {
-  return "https://api.allorigins.win/get?url=" + encodeURIComponent(raw);
+  return "https://proxy.cors.dev/" + raw;
 }
 
 // ─── Nearby Search via REST + proxy ──────────────────────────────────
@@ -130,17 +130,9 @@ function getLocationID(lat, lon) {
     dataType: "json",
     timeout: 15000
   })
-    .done(function (wrapper) {
-      var data;
-      try {
-        data = typeof wrapper.contents === "string" ? JSON.parse(wrapper.contents) : wrapper.contents;
-      } catch (e) {
-        showError("Could not parse restaurant data.");
-        return;
-      }
-
-      if (data.status !== "OK" || !data.results || data.results.length === 0) {
-        showError("No restaurants found nearby (" + (data.status || "unknown") + "). Try again!");
+    .done(function (data) {
+      if (!data || data.status !== "OK" || !data.results || data.results.length === 0) {
+        showError("No restaurants found nearby (" + (data && data.status || "unknown") + "). Try again!");
         return;
       }
 
@@ -216,17 +208,7 @@ function fetchDetails(placeId) {
     dataType: "json",
     timeout: 12000
   })
-    .done(function (wrapper) {
-      var data;
-      try {
-        data = typeof wrapper.contents === "string" ? JSON.parse(wrapper.contents) : wrapper.contents;
-      } catch (e) {
-        $("#details-slot").html("<p style='color:#c0392b'>⚠ Extra details unavailable.</p>");
-        showLoading(false);
-        scrollToBottom();
-        return;
-      }
-
+    .done(function (data) {
       var d = data.result || {};
       var $slot = $("#details-slot").empty();
 
