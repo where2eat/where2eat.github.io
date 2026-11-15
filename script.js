@@ -1,15 +1,14 @@
-// Where2Eat — fixed & expanded
+// Where2Eat — fixed version
 // Created: Chuck Konkol
-// Updated: (this revision)
+// Fixes: weather now loads, places use official Maps JS API (no broken CORS proxy), OpenWeather key removed
 
-var API_KEY = "AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc";
-var OWM_KEY = "88679b3ed150543b880c7b4c2f742ac1";
+var API_KEY = "AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc"; // Google Maps / Places key (restrict to your domain in console)
 
-var pids = '';
-var selectedRest = null;   // store the full chosen result so details() can reuse it
+var selectedRest = null;
 var userLat, userLon;
+var placesService = null;
 
-// ─── Roulette helpers (kept from original) ───────────────────────────
+// ─── Roulette helpers ────────────────────────────────────────────────
 var numbers = [];
 var ranges  = [];
 var randomInd;
@@ -20,7 +19,6 @@ function generateNumbers(max) {
   for (var i = 0; i < max; i++) numbers.push(i);
 }
 function spin(count) {
-  // FIX: bound to actual result count, not a fixed 20
   if (numbers.length === 0) generateNumbers(count);
   randomInd = numbers[Math.floor(Math.random() * numbers.length)];
   numbers.splice(randomInd === numbers.length - 1 ? numbers.length - 1 : numbers.indexOf(randomInd), 1);
@@ -38,39 +36,51 @@ function spin2() {
 // ─── DOM helpers ──────────────────────────────────────────────────────
 function clearDiv(id) {
   var el = document.getElementById(id);
+  if (!el) return;
   while (el.firstChild) el.removeChild(el.firstChild);
 }
 function showLoading(on) {
-  document.getElementById('loading').style.display = on ? 'block' : 'none';
-  document.getElementById('go').style.display     = on ? 'none'  : 'inline-block';
-  document.getElementById('results-container').style.display = on ? 'none' : 'block';
+  var loading = document.getElementById('loading');
+  var go = document.getElementById('go');
+  var results = document.getElementById('results-container');
+  if (loading) loading.style.display = on ? 'block' : 'none';
+  if (go) go.style.display = on ? 'none' : 'inline-block';
+  if (results) results.style.display = on ? 'none' : 'block';
 }
 
-// ─── Weather — FIXED ─────────────────────────────────────────────────
-// OLD BUG: parsed city name from address string → often garbage ("62701", "IL")
-// NEW:   use lat/lon directly with OpenWeatherMap geocoded endpoint
+// ─── Weather using wttr.in (free, no key, CORS-friendly) ─────────────
 function searchWeather(lat, lon) {
-  var url = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + OWM_KEY;
+  var url = "https://wttr.in/" + lat + "," + lon + "?format=j1";
 
   $.ajax({ url: url, method: "GET", timeout: 8000 })
-    .done(function (r) {
-      var cityName  = r.name;
-      var main      = r.weather[0].main;
-      var desc      = r.weather[0].description;
-      var iconCode  = r.weather[0].icon;
-      var iconURL   = "https://openweathermap.org/img/w/" + iconCode + ".png";
-      var tempC     = Math.round(r.main.temp - 273.15);
-      var tempF     = Math.round((tempC * 9/5) + 32);
-      var windKmh   = r.wind ? Math.round(r.wind.speed * 3.6) : '–';
-      var hum       = r.main ? r.main.humidity + '%' : '–';
+    .done(function (data) {
+      try {
+        var cur = data.current_condition[0];
+        var desc = cur.weatherDesc[0].value;
+        var tempC = cur.temp_C;
+        var tempF = cur.temp_F;
+        var wind = cur.windspeedKmph + " km/h";
+        var hum  = cur.humidity + "%";
+        var icon = cur.weatherIconUrl[0].value;
 
-      // FIX: build DOM safely; old code used $(mainWeather) as a selector
-      var $div = $("#cityinfo-div").empty();
-      $div.append("<h1>" + cityName + "</h1>");
-      $div.append("<p>Current: <b>" + main + "</b> — " + desc + "</p>");
-      $div.append("<p>" + tempC + "°C / " + tempF + "°F&nbsp;&nbsp;💨 " + windKmh + " km/h&nbsp;&nbsp;💧 " + hum + "</p>");
-      $div.append($("<img>").attr("src", iconURL).css({ width: 64, height: 64 }));
-      setWeatherBackground(main);
+        // Approximate main condition for background
+        var main = "Clear";
+        var d = desc.toLowerCase();
+        if (d.includes("rain") || d.includes("drizzle")) main = "Rain";
+        else if (d.includes("snow")) main = "Snow";
+        else if (d.includes("cloud")) main = "Clouds";
+        else if (d.includes("thunder")) main = "Thunderstorm";
+        else if (d.includes("mist") || d.includes("fog")) main = "Mist";
+
+        var $div = $("#cityinfo-div").empty();
+        $div.append("<h1>Nearby</h1>");
+        $div.append("<p>Current: <b>" + desc + "</b></p>");
+        $div.append("<p>" + tempC + "°C / " + tempF + "°F&nbsp;&nbsp;💨 " + wind + "&nbsp;&nbsp;💧 " + hum + "</p>");
+        if (icon) $div.append($("<img>").attr("src", icon).css({ width: 64, height: 64 }));
+        setWeatherBackground(main);
+      } catch (e) {
+        $("#cityinfo-div").append("<p style='color:#c0392b'>⚠ Weather data unavailable.</p>");
+      }
     })
     .fail(function () {
       $("#cityinfo-div").append("<p style='color:#c0392b'>⚠ Weather unavailable right now.</p>");
@@ -86,151 +96,148 @@ function setWeatherBackground(main) {
   $("body").css("background-image", "url(" + (map[main] || "./Assets/food.jpg") + ")");
 }
 
-// ─── Nearby Search — FIXED ───────────────────────────────────────────
+// ─── Load Google Maps Places library (official browser way) ──────────
+function loadGoogleMaps(callback) {
+  if (window.google && window.google.maps && window.google.maps.places) {
+    callback();
+    return;
+  }
+  var script = document.createElement('script');
+  script.src = "https://maps.googleapis.com/maps/api/js?key=" + API_KEY + "&libraries=places&callback=initPlaces";
+  script.async = true;
+  script.defer = true;
+  window.initPlaces = function () {
+    // Create a dummy map element (required by PlacesService)
+    var mapDiv = document.createElement('div');
+    mapDiv.style.display = 'none';
+    document.body.appendChild(mapDiv);
+    var map = new google.maps.Map(mapDiv, { center: { lat: 0, lng: 0 }, zoom: 1 });
+    placesService = new google.maps.places.PlacesService(map);
+    callback();
+  };
+  document.head.appendChild(script);
+}
+
+// ─── Nearby Search using PlacesService (no CORS proxy needed) ────────
 function getLocationID(lat, lon) {
   clearDiv("restaurantinfo-div");
   clearDiv("cityinfo-div");
-  spin(20);           // generate 20 candidate indices
-  spin2();            // pick random radius
+  spin(20);
+  spin2();
 
-  var url = "https://corsproxy.io/?https://maps.googleapis.com/maps/api/place/nearbysearch/json"
-          + "?location=" + lat + "," + lon
-          + "&radius="  + randomradius
-          + "&type=restaurant"
-          + "&key="     + API_KEY;
+  // Load weather immediately
+  searchWeather(lat, lon);
 
-  $.ajax({ url: url, method: "GET", timeout: 12000 })
-    .done(function (data) {
-      if (data.status !== "OK" || !data.results || data.results.length === 0) {
+  loadGoogleMaps(function () {
+    var request = {
+      location: new google.maps.LatLng(lat, lon),
+      radius: randomradius,
+      type: 'restaurant'
+    };
+
+    placesService.nearbySearch(request, function (results, status) {
+      if (status !== google.maps.places.PlacesServiceStatus.OK || !results || results.length === 0) {
         $("#restaurantinfo-div").append("<p>No restaurants found nearby. Try again!</p>");
         showLoading(false);
         return;
       }
 
-      // FIX: clamp random index to actual number of results
-      var count = Math.min(numbers.length, data.results.length);
-      var idx   = Math.floor(Math.random() * count);
-      selectedRest = data.results[idx];
-      pids = selectedRest.place_id;
+      var idx = Math.floor(Math.random() * Math.min(results.length, 20));
+      selectedRest = results[idx];
 
       renderRestaurant(selectedRest, randomradius);
-      // FIX: chain details() right after render instead of a blind setTimeout
-      fetchDetails(pids);
-    })
-    .fail(function (xhr, status, err) {
-      $("#restaurantinfo-div").append("<p style='color:#c0392b'>⚠ Couldn't reach the restaurant service. Check your connection and try again.</p>");
-      console.error("Nearby search failed:", status, err);
-      showLoading(false);
+      fetchDetails(selectedRest.place_id);
     });
+  });
 }
 
-// ─── Render restaurant card — EXPANDED ───────────────────────────────
+// ─── Render restaurant card ──────────────────────────────────────────
 function renderRestaurant(r, radiusUsed) {
   var $div = $("#restaurantinfo-div").empty();
 
-  // Name
-  $div.append("<h1>" + r.name + "</h1>");
+  $div.append("<h1>" + (r.name || "Restaurant") + "</h1>");
 
-  // Address → maps link
   var addr = r.vicinity || "Address not provided";
-  var link = $("<a>").text(addr).attr("href", "https://maps.google.com/?q=" + encodeURIComponent(addr)).attr("target","_blank");
+  var link = $("<a>").text(addr)
+    .attr("href", "https://maps.google.com/?q=" + encodeURIComponent(addr))
+    .attr("target", "_blank");
   $div.append(link);
 
-  // Photo (first one)
   if (r.photos && r.photos.length > 0) {
-    $div.append("<br><img src='https://maps.googleapis.com/maps/api/place/photo?photoreference="
-      + r.photos[0].photo_reference + "&sensor=false&maxheight=225&maxwidth=225&key=" + API_KEY
-      + "' style='max-width:225px;max-height:225px;border-radius:8px;margin:8px 0' onerror=\"this.style.display='none'\">");
+    var photoUrl = r.photos[0].getUrl({ maxWidth: 225, maxHeight: 225 });
+    $div.append("<br><img src='" + photoUrl + "' style='max-width:225px;max-height:225px;border-radius:8px;margin:8px 0' onerror=\"this.style.display='none'\">");
   }
 
-  // Open now
   if (r.opening_hours) {
-    $div.append("<p><b>Open Now?</b> " + (r.opening_hours.open_now ? "✅ Yes" : "❌ No (call ahead)") + "</p>");
+    $div.append("<p><b>Open Now?</b> " + (r.opening_hours.isOpen ? r.opening_hours.isOpen() ? "✅ Yes" : "❌ No (call ahead)" : "Unknown") + "</p>");
   }
 
-  // Distance hint
   $div.append("<p style='color:gray;font-size:13px'>Within ~" + Math.round(radiusUsed / 100) / 10 + " km search radius</p>");
-
-  // Placeholder for details (phone, website, rating…) — filled by fetchDetails
   $div.append("<div id='details-slot'></div>");
 }
 
-// ─── Place Details — EXPANDED ────────────────────────────────────────
-// OLD:  fields = formatted_phone_number, website  (only 2 fields)
-// NEW:  adds rating, reviews, price level, full address, cuisine, hours
+// ─── Place Details ───────────────────────────────────────────────────
 function fetchDetails(placeId) {
-  var FIELDS = [
-    "formatted_phone_number","website",
-    "rating","user_ratings_total","price_level",
-    "formatted_address","cuisine",
-    "opening_hours"
-  ].join(",");
+  if (!placesService) return;
 
-  var url = "https://corsproxy.io/?https://maps.googleapis.com/maps/api/place/details/json"
-          + "?place_id=" + placeId
-          + "&fields="   + encodeURIComponent(FIELDS)
-          + "&key="      + API_KEY;
+  var request = {
+    placeId: placeId,
+    fields: ['formatted_phone_number', 'website', 'rating', 'user_ratings_total', 'price_level', 'formatted_address', 'opening_hours', 'name']
+  };
 
-  $.ajax({ url: url, method: "GET", timeout: 10000 })
-    .done(function (data) {
-      var d = data.result;
-      var $slot = $("#details-slot");
-
-      // Rating + reviews
-      if (d.rating) {
-        var stars = "★".repeat(d.price_level || 1) + " ".repeat(Math.max(0, 4 - (d.price_level || 1)));
-        var stars = "";
-        for (var s = 0; s < 5; s++) stars += s < Math.round(d.rating) ? "★" : "☆";
-        $slot.append("<p class='stars'>" + stars + " " + d.rating
-          + " <span style='color:#888;font-size:13px'>(" + (d.user_ratings_total || 0) + " reviews)</span></p>");
-      }
-
-      // Cuisine types
-      if (d.cuisine && d.cuisine.length) {
-        $slot.append("<p><b>Cuisine:</b> " + d.cuisine.join(", ") + "</p>");
-      }
-
-      // Price level
-      if (d.price_level) {
-        $slot.append("<p><b>Price:</b> " + "$".repeat(d.price_level) + "</p>");
-      }
-
-      // Full address (more precise than vicinity)
-      if (d.formatted_address && d.formatted_address !== (selectedRest.vicinity || "")) {
-        $slot.append("<p><b>Address:</b> " + d.formatted_address + "</p>");
-      }
-
-      // Phone
-      if (d.formatted_phone_number) {
-        $slot.append("<p><a href='tel:" + d.formatted_phone_number + "'>" + d.formatted_phone_number + "</a></p>");
-      } else {
-        $slot.append("<p><b>Phone:</b> [not listed]</p>");
-      }
-
-      // Website
-      if (d.website) {
-        $slot.append("<p><b>Website:</b> <a href='" + d.website + "' target='_blank'>" + d.website + "</a></p>");
-      } else {
-        $slot.append("<p><b>Website:</b> [not listed]</p>");
-      }
-
-      // Opening hours (full day list, not just open/closed)
-      if (d.opening_hours && d.opening_hours.weekday_text) {
-        var $hours = $("<ul>").css({ margin: "4px 0", padding: "0 0 0 20px" });
-        $.each(d.opening_hours.weekday_text, function (_, line) {
-          $hours.append($("<li>").text(line));
-        });
-        $slot.append("<p><b>Hours:</b></p>" + $hours);
-      }
-
-      showLoading(false);
-      scrollToBottom();
-    })
-    .fail(function () {
+  placesService.getDetails(request, function (d, status) {
+    var $slot = $("#details-slot");
+    if (status !== google.maps.places.PlacesServiceStatus.OK || !d) {
       $slot.append("<p style='color:#c0392b'>⚠ Extra details unavailable.</p>");
       showLoading(false);
       scrollToBottom();
-    });
+      return;
+    }
+
+    // Rating stars
+    if (d.rating) {
+      var stars = "";
+      for (var s = 0; s < 5; s++) stars += s < Math.round(d.rating) ? "★" : "☆";
+      $slot.append("<p class='stars'>" + stars + " " + d.rating
+        + " <span style='color:#888;font-size:13px'>(" + (d.user_ratings_total || 0) + " reviews)</span></p>");
+    }
+
+    // Price level
+    if (d.price_level) {
+      $slot.append("<p><b>Price:</b> " + "$".repeat(d.price_level) + "</p>");
+    }
+
+    // Full address
+    if (d.formatted_address) {
+      $slot.append("<p><b>Address:</b> " + d.formatted_address + "</p>");
+    }
+
+    // Phone
+    if (d.formatted_phone_number) {
+      $slot.append("<p><a href='tel:" + d.formatted_phone_number + "'>" + d.formatted_phone_number + "</a></p>");
+    } else {
+      $slot.append("<p><b>Phone:</b> [not listed]</p>");
+    }
+
+    // Website
+    if (d.website) {
+      $slot.append("<p><b>Website:</b> <a href='" + d.website + "' target='_blank'>" + d.website + "</a></p>");
+    } else {
+      $slot.append("<p><b>Website:</b> [not listed]</p>");
+    }
+
+    // Opening hours
+    if (d.opening_hours && d.opening_hours.weekday_text) {
+      var $hours = $("<ul>").css({ margin: "4px 0", padding: "0 0 0 20px" });
+      $.each(d.opening_hours.weekday_text, function (_, line) {
+        $hours.append($("<li>").text(line));
+      });
+      $slot.append("<p><b>Hours:</b></p>").append($hours);
+    }
+
+    showLoading(false);
+    scrollToBottom();
+  });
 }
 
 // ─── Geolocation entry point ─────────────────────────────────────────
@@ -246,7 +253,6 @@ function showPosition(position) {
   userLat = position.coords.latitude;
   userLon = position.coords.longitude;
   showLoading(true);
-  // FIX: call directly (small delay just for UX feel), details chained in fetchDetails
   setTimeout(function () { getLocationID(userLat, userLon); }, 400);
 }
 
