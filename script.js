@@ -1,16 +1,15 @@
-// Where2Eat — fixed version
+// Where2Eat — fixed version 2
 // Created: Chuck Konkol
-// Fixes: weather now loads, places use official Maps JS API (no broken CORS proxy), OpenWeather key removed
+// Fixes: weather JSON parse, places via REST + working proxy (PlacesService was hanging)
 
-var API_KEY = "AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc"; // Google Maps / Places key (restrict to your domain in console)
+var API_KEY = "AIzaSyC2oYu6gWezMlWH0C8ACn2mRl81ISqu4mc";
 
 var selectedRest = null;
 var userLat, userLon;
-var placesService = null;
 
 // ─── Roulette helpers ────────────────────────────────────────────────
 var numbers = [];
-var ranges  = [];
+var ranges = [];
 var randomInd;
 var randomradius;
 
@@ -40,19 +39,24 @@ function clearDiv(id) {
   while (el.firstChild) el.removeChild(el.firstChild);
 }
 function showLoading(on) {
-  var loading = document.getElementById('loading');
-  var go = document.getElementById('go');
-  var results = document.getElementById('results-container');
-  if (loading) loading.style.display = on ? 'block' : 'none';
-  if (go) go.style.display = on ? 'none' : 'inline-block';
-  if (results) results.style.display = on ? 'none' : 'block';
+  var loading = document.getElementById("loading");
+  var go = document.getElementById("go");
+  var results = document.getElementById("results-container");
+  if (loading) loading.style.display = on ? "block" : "none";
+  if (go) go.style.display = on ? "none" : "inline-block";
+  if (results) results.style.display = on ? "none" : "block";
 }
 
-// ─── Weather using wttr.in (free, no key, CORS-friendly) ─────────────
+// ─── Weather (wttr.in, force JSON) ───────────────────────────────────
 function searchWeather(lat, lon) {
   var url = "https://wttr.in/" + lat + "," + lon + "?format=j1";
 
-  $.ajax({ url: url, method: "GET", timeout: 8000 })
+  $.ajax({
+    url: url,
+    method: "GET",
+    dataType: "json",          // critical — wttr does not send application/json
+    timeout: 8000
+  })
     .done(function (data) {
       try {
         var cur = data.current_condition[0];
@@ -60,12 +64,11 @@ function searchWeather(lat, lon) {
         var tempC = cur.temp_C;
         var tempF = cur.temp_F;
         var wind = cur.windspeedKmph + " km/h";
-        var hum  = cur.humidity + "%";
-        var icon = cur.weatherIconUrl[0].value;
+        var hum = cur.humidity + "%";
+        var icon = cur.weatherIconUrl && cur.weatherIconUrl[0] ? cur.weatherIconUrl[0].value : null;
 
-        // Approximate main condition for background
         var main = "Clear";
-        var d = desc.toLowerCase();
+        var d = (desc || "").toLowerCase();
         if (d.includes("rain") || d.includes("drizzle")) main = "Rain";
         else if (d.includes("snow")) main = "Snow";
         else if (d.includes("cloud")) main = "Clouds";
@@ -79,76 +82,82 @@ function searchWeather(lat, lon) {
         if (icon) $div.append($("<img>").attr("src", icon).css({ width: 64, height: 64 }));
         setWeatherBackground(main);
       } catch (e) {
-        $("#cityinfo-div").append("<p style='color:#c0392b'>⚠ Weather data unavailable.</p>");
+        $("#cityinfo-div").html("<p style='color:#c0392b'>⚠ Weather data unavailable.</p>");
       }
     })
     .fail(function () {
-      $("#cityinfo-div").append("<p style='color:#c0392b'>⚠ Weather unavailable right now.</p>");
+      $("#cityinfo-div").html("<p style='color:#c0392b'>⚠ Weather unavailable right now.</p>");
     });
 }
 
 function setWeatherBackground(main) {
   var map = {
-    Clear:"./Assets/clear.jpg", Thunderstorm:"./Assets/thunderstorm.jpg",
-    Clouds:"./Assets/clouds.jpg", Drizzle:"./Assets/drizzle.jpg",
-    Rain:"./Assets/rain.png", Snow:"./Assets/snow.jpg", Mist:"./Assets/mist.png"
+    Clear: "./Assets/clear.jpg",
+    Thunderstorm: "./Assets/thunderstorm.jpg",
+    Clouds: "./Assets/clouds.jpg",
+    Drizzle: "./Assets/drizzle.jpg",
+    Rain: "./Assets/rain.png",
+    Snow: "./Assets/snow.jpg",
+    Mist: "./Assets/mist.png"
   };
   $("body").css("background-image", "url(" + (map[main] || "./Assets/food.jpg") + ")");
 }
 
-// ─── Load Google Maps Places library (official browser way) ──────────
-function loadGoogleMaps(callback) {
-  if (window.google && window.google.maps && window.google.maps.places) {
-    callback();
-    return;
-  }
-  var script = document.createElement('script');
-  script.src = "https://maps.googleapis.com/maps/api/js?key=" + API_KEY + "&libraries=places&callback=initPlaces";
-  script.async = true;
-  script.defer = true;
-  window.initPlaces = function () {
-    // Create a dummy map element (required by PlacesService)
-    var mapDiv = document.createElement('div');
-    mapDiv.style.display = 'none';
-    document.body.appendChild(mapDiv);
-    var map = new google.maps.Map(mapDiv, { center: { lat: 0, lng: 0 }, zoom: 1 });
-    placesService = new google.maps.places.PlacesService(map);
-    callback();
-  };
-  document.head.appendChild(script);
+// ─── Proxy helper (allorigins works with Google REST) ────────────────
+function proxyUrl(raw) {
+  return "https://api.allorigins.win/get?url=" + encodeURIComponent(raw);
 }
 
-// ─── Nearby Search using PlacesService (no CORS proxy needed) ────────
+// ─── Nearby Search via REST + proxy ──────────────────────────────────
 function getLocationID(lat, lon) {
   clearDiv("restaurantinfo-div");
   clearDiv("cityinfo-div");
   spin(20);
   spin2();
 
-  // Load weather immediately
   searchWeather(lat, lon);
 
-  loadGoogleMaps(function () {
-    var request = {
-      location: new google.maps.LatLng(lat, lon),
-      radius: randomradius,
-      type: 'restaurant'
-    };
+  var googleUrl =
+    "https://maps.googleapis.com/maps/api/place/nearbysearch/json" +
+    "?location=" + lat + "," + lon +
+    "&radius=" + randomradius +
+    "&type=restaurant" +
+    "&key=" + API_KEY;
 
-    placesService.nearbySearch(request, function (results, status) {
-      if (status !== google.maps.places.PlacesServiceStatus.OK || !results || results.length === 0) {
-        $("#restaurantinfo-div").append("<p>No restaurants found nearby. Try again!</p>");
-        showLoading(false);
+  $.ajax({
+    url: proxyUrl(googleUrl),
+    method: "GET",
+    dataType: "json",
+    timeout: 15000
+  })
+    .done(function (wrapper) {
+      var data;
+      try {
+        data = typeof wrapper.contents === "string" ? JSON.parse(wrapper.contents) : wrapper.contents;
+      } catch (e) {
+        showError("Could not parse restaurant data.");
         return;
       }
 
-      var idx = Math.floor(Math.random() * Math.min(results.length, 20));
-      selectedRest = results[idx];
+      if (data.status !== "OK" || !data.results || data.results.length === 0) {
+        showError("No restaurants found nearby (" + (data.status || "unknown") + "). Try again!");
+        return;
+      }
+
+      var idx = Math.floor(Math.random() * Math.min(data.results.length, 20));
+      selectedRest = data.results[idx];
 
       renderRestaurant(selectedRest, randomradius);
       fetchDetails(selectedRest.place_id);
+    })
+    .fail(function () {
+      showError("Couldn't reach the restaurant service. Check your connection and try again.");
     });
-  });
+}
+
+function showError(msg) {
+  $("#restaurantinfo-div").html("<p style='color:#c0392b'>⚠ " + msg + "</p>");
+  showLoading(false);
 }
 
 // ─── Render restaurant card ──────────────────────────────────────────
@@ -158,86 +167,119 @@ function renderRestaurant(r, radiusUsed) {
   $div.append("<h1>" + (r.name || "Restaurant") + "</h1>");
 
   var addr = r.vicinity || "Address not provided";
-  var link = $("<a>").text(addr)
+  var link = $("<a>")
+    .text(addr)
     .attr("href", "https://maps.google.com/?q=" + encodeURIComponent(addr))
     .attr("target", "_blank");
   $div.append(link);
 
   if (r.photos && r.photos.length > 0) {
-    var photoUrl = r.photos[0].getUrl({ maxWidth: 225, maxHeight: 225 });
-    $div.append("<br><img src='" + photoUrl + "' style='max-width:225px;max-height:225px;border-radius:8px;margin:8px 0' onerror=\"this.style.display='none'\">");
+    var photoUrl =
+      "https://maps.googleapis.com/maps/api/place/photo?maxwidth=225&photoreference=" +
+      r.photos[0].photo_reference +
+      "&key=" + API_KEY;
+    $div.append(
+      "<br><img src='" + photoUrl + "' style='max-width:225px;max-height:225px;border-radius:8px;margin:8px 0' onerror=\"this.style.display='none'\">"
+    );
   }
 
   if (r.opening_hours) {
-    $div.append("<p><b>Open Now?</b> " + (r.opening_hours.isOpen ? r.opening_hours.isOpen() ? "✅ Yes" : "❌ No (call ahead)" : "Unknown") + "</p>");
+    $div.append("<p><b>Open Now?</b> " + (r.opening_hours.open_now ? "✅ Yes" : "❌ No (call ahead)") + "</p>");
   }
 
   $div.append("<p style='color:gray;font-size:13px'>Within ~" + Math.round(radiusUsed / 100) / 10 + " km search radius</p>");
   $div.append("<div id='details-slot'></div>");
 }
 
-// ─── Place Details ───────────────────────────────────────────────────
+// ─── Place Details via REST + proxy ──────────────────────────────────
 function fetchDetails(placeId) {
-  if (!placesService) return;
+  var fields = [
+    "formatted_phone_number",
+    "website",
+    "rating",
+    "user_ratings_total",
+    "price_level",
+    "formatted_address",
+    "opening_hours",
+    "name"
+  ].join(",");
 
-  var request = {
-    placeId: placeId,
-    fields: ['formatted_phone_number', 'website', 'rating', 'user_ratings_total', 'price_level', 'formatted_address', 'opening_hours', 'name']
-  };
+  var googleUrl =
+    "https://maps.googleapis.com/maps/api/place/details/json" +
+    "?place_id=" + placeId +
+    "&fields=" + encodeURIComponent(fields) +
+    "&key=" + API_KEY;
 
-  placesService.getDetails(request, function (d, status) {
-    var $slot = $("#details-slot");
-    if (status !== google.maps.places.PlacesServiceStatus.OK || !d) {
-      $slot.append("<p style='color:#c0392b'>⚠ Extra details unavailable.</p>");
+  $.ajax({
+    url: proxyUrl(googleUrl),
+    method: "GET",
+    dataType: "json",
+    timeout: 12000
+  })
+    .done(function (wrapper) {
+      var data;
+      try {
+        data = typeof wrapper.contents === "string" ? JSON.parse(wrapper.contents) : wrapper.contents;
+      } catch (e) {
+        $("#details-slot").html("<p style='color:#c0392b'>⚠ Extra details unavailable.</p>");
+        showLoading(false);
+        scrollToBottom();
+        return;
+      }
+
+      var d = data.result || {};
+      var $slot = $("#details-slot").empty();
+
+      if (d.rating) {
+        var stars = "";
+        for (var s = 0; s < 5; s++) stars += s < Math.round(d.rating) ? "★" : "☆";
+        $slot.append(
+          "<p class='stars'>" +
+            stars +
+            " " +
+            d.rating +
+            " <span style='color:#888;font-size:13px'>(" +
+            (d.user_ratings_total || 0) +
+            " reviews)</span></p>"
+        );
+      }
+
+      if (d.price_level) {
+        $slot.append("<p><b>Price:</b> " + "$".repeat(d.price_level) + "</p>");
+      }
+
+      if (d.formatted_address) {
+        $slot.append("<p><b>Address:</b> " + d.formatted_address + "</p>");
+      }
+
+      if (d.formatted_phone_number) {
+        $slot.append("<p><a href='tel:" + d.formatted_phone_number + "'>" + d.formatted_phone_number + "</a></p>");
+      } else {
+        $slot.append("<p><b>Phone:</b> [not listed]</p>");
+      }
+
+      if (d.website) {
+        $slot.append("<p><b>Website:</b> <a href='" + d.website + "' target='_blank'>" + d.website + "</a></p>");
+      } else {
+        $slot.append("<p><b>Website:</b> [not listed]</p>");
+      }
+
+      if (d.opening_hours && d.opening_hours.weekday_text) {
+        var $hours = $("<ul>").css({ margin: "4px 0", padding: "0 0 0 20px" });
+        $.each(d.opening_hours.weekday_text, function (_, line) {
+          $hours.append($("<li>").text(line));
+        });
+        $slot.append("<p><b>Hours:</b></p>").append($hours);
+      }
+
       showLoading(false);
       scrollToBottom();
-      return;
-    }
-
-    // Rating stars
-    if (d.rating) {
-      var stars = "";
-      for (var s = 0; s < 5; s++) stars += s < Math.round(d.rating) ? "★" : "☆";
-      $slot.append("<p class='stars'>" + stars + " " + d.rating
-        + " <span style='color:#888;font-size:13px'>(" + (d.user_ratings_total || 0) + " reviews)</span></p>");
-    }
-
-    // Price level
-    if (d.price_level) {
-      $slot.append("<p><b>Price:</b> " + "$".repeat(d.price_level) + "</p>");
-    }
-
-    // Full address
-    if (d.formatted_address) {
-      $slot.append("<p><b>Address:</b> " + d.formatted_address + "</p>");
-    }
-
-    // Phone
-    if (d.formatted_phone_number) {
-      $slot.append("<p><a href='tel:" + d.formatted_phone_number + "'>" + d.formatted_phone_number + "</a></p>");
-    } else {
-      $slot.append("<p><b>Phone:</b> [not listed]</p>");
-    }
-
-    // Website
-    if (d.website) {
-      $slot.append("<p><b>Website:</b> <a href='" + d.website + "' target='_blank'>" + d.website + "</a></p>");
-    } else {
-      $slot.append("<p><b>Website:</b> [not listed]</p>");
-    }
-
-    // Opening hours
-    if (d.opening_hours && d.opening_hours.weekday_text) {
-      var $hours = $("<ul>").css({ margin: "4px 0", padding: "0 0 0 20px" });
-      $.each(d.opening_hours.weekday_text, function (_, line) {
-        $hours.append($("<li>").text(line));
-      });
-      $slot.append("<p><b>Hours:</b></p>").append($hours);
-    }
-
-    showLoading(false);
-    scrollToBottom();
-  });
+    })
+    .fail(function () {
+      $("#details-slot").html("<p style='color:#c0392b'>⚠ Extra details unavailable.</p>");
+      showLoading(false);
+      scrollToBottom();
+    });
 }
 
 // ─── Geolocation entry point ─────────────────────────────────────────
@@ -253,7 +295,9 @@ function showPosition(position) {
   userLat = position.coords.latitude;
   userLon = position.coords.longitude;
   showLoading(true);
-  setTimeout(function () { getLocationID(userLat, userLon); }, 400);
+  setTimeout(function () {
+    getLocationID(userLat, userLon);
+  }, 400);
 }
 
 function onGeoError(err) {
