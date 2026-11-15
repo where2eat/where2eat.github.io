@@ -1,4 +1,3 @@
-// Where2Eat — fixed version
 // Created: Chuck Konkol
 // Fixes: weather now loads, places use official Maps JS API (no broken CORS proxy), OpenWeather key removed
 
